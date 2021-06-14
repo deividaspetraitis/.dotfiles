@@ -1,0 +1,7 @@
+# Plugins are managed by manager
+bundle
+ftdetect
+pack
+sessions
+swpdir
+undodir
