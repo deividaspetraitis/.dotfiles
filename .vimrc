@@ -19,9 +19,6 @@ Plugin 'takac/vim-hardtime'
 " YouCompleteMe: a code-completion engine for Vim
 Plugin 'ycm-core/YouCompleteMe'
 
-" ctrlp.vim is a full path fuzzy file, buffer, mru, tag, ... finder for Vim.
-Plugin 'ctrlpvim/ctrlp.vim'
-
 " UltiSnips is the ultimate solution for snippets in Vim. It has many features, speed being one of them. Track the engine.
 Plugin 'SirVer/ultisnips'
 
@@ -47,6 +44,12 @@ Plugin 'kshenoy/vim-signature'
 
 " Peekaboo will show you the contents of the registers on the sidebar when you hit " or @ in normal mode or <CTRL-R> in insert mode
 Plugin 'junegunn/vim-peekaboo'
+
+" Telescope.nvim is a highly extendable fuzzy finder over lists.
+Plugin 'nvim-lua/popup.nvim'
+Plugin 'nvim-lua/plenary.nvim'
+Plugin 'nvim-telescope/telescope.nvim'
+Plugin 'nvim-telescope/telescope-fzy-native.nvim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -211,13 +214,13 @@ colorscheme PaperColor
 " Toggle ON/OFF tree F6
 nmap <F6> :NERDTreeToggle<CR>
 
-" CTRLP plugin settings
+" Telescope plugin settings
 
-" Refresh CTRLP plugin cache on file created
-let g:ctrlp_use_caching = 0
-let g:ctrlp_max_files = 0
-let g:ctrlp_max_depth = 40
-let g:ctrlp_working_path_mode=''
+" Using lua functions
+nnoremap <C-p> <cmd>lua require('telescope.builtin').git_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 "###########################################################################
 " Mappings
