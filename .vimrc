@@ -118,7 +118,8 @@ syntax on
 " let g:go_debug=['lsp']
 
 " Set leader key
-let mapleader = "\\"
+nnoremap <SPACE> <Nop>
+let mapleader = "\<Space>"
 
 " Display line numbers
 set number
@@ -256,6 +257,12 @@ nnoremap <Leader>w :w<CR>
 " ! - prevents jumping to the first match
 nnoremap <Leader>F :grep! -rn . -e '<C-R><C-W>'<CR><CR> \| :copen <CR>
 
+" Windows management
+nnoremap <Leader>\| <C-W>v
+nnoremap <Leader>- <C-W>s
+
+nnoremap <Leader>r :source ~/.vimrc <CR>
+
 " Vim sessions management
 exec 'nnoremap <Leader>ss :mks! ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
 exec 'nnoremap <Leader>sr :so ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
@@ -302,4 +309,4 @@ nnoremap <silent> <C-Right> :call TmuxMove('l')<cr>
 nnoremap <silent> <C-h> :call TmuxMove('h')<cr>
 nnoremap <silent> <C-j> :call TmuxMove('j')<cr>
 nnoremap <silent> <C-k> :call TmuxMove('k')<cr>
-nnoremap <silent> <C-l> :call TmuxMove('l')<cr>
+noremap <silent> <C-l> :call TmuxMove('l')<cr>
