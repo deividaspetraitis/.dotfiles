@@ -21,5 +21,6 @@ vnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*\(fu\
 " YCM mappings, we want to make it to work close as possible to the defaults
 nnoremap gD :YcmCompleter GoToDeclaration <CR>
 nnoremap g] :YcmCompleter GoToReferences <CR>
+nnoremap <leader>gi :YcmCompleter GoToImplementation <CR>
 nnoremap <C-]> :YcmCompleter GoToDefinition <CR>
 nnoremap <C-w>} :YcmCompleter GetDoc <CR>
