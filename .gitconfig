@@ -1,0 +1,10 @@
+[user]
+	name = deividaspetraitis
+	email = hi@deividaspetraitis.lt
+[core]
+	autocrlf = input
+	excludesFile = ~/.gitignore
+[interactive]
+	diffFilter = diff-highlight
+[pager]
+	diff = diff-highlight | less
