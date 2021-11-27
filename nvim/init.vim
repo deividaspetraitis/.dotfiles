@@ -1,0 +1,1 @@
+/home/deividas/.dotfiles/.vimrc
