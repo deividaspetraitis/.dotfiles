@@ -2,7 +2,7 @@
 
 # dotfiles is a list of dotfiles to be maintained by this script
 # TODO: $(ls dotfilespath) ?
-dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc)
+dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc i3, .Xmodmap)
 
 destination=$1
 dotfilesdir=$(dirname $(readlink -f $0))
