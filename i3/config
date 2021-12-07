@@ -158,6 +158,18 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# discrete way to lock/log out/suspend/shutdown system
+set $mode_system \
+System (l) lock
+
+mode "$mode_system" {
+	bindsym l exec --no-startup-id i3lock -i ~/Documents/Wallpapers/lock.png, mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+
+bindsym $mod+BackSpace mode "$mode_system"
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -191,6 +203,8 @@ bar {
         status_command i3status
 }
 
+# system lock binding
 bindsym $mod+CTRL+Shift+l exec "i3lock -i ~/Documents/Wallpapers/lock.png"
 
-exec --no startup-id feh --no-fehbg --bg-fill ~/Documents/Wallpapers/workspace.png
+# set wallpaper for X11
+exec --no-startup-id feh --no-fehbg --bg-fill ~/Documents/Wallpapers/workspace.png
