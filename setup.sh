@@ -1,31 +1,77 @@
 #!/bin/bash
 
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -d|--directory)
+      DIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -f|--files)
+      FILES="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    --uninstall)
+      uninstall=YES
+      shift # past argument
+      ;;
+    *)    # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+
 # dotfiles is a list of dotfiles to be maintained by this script
 # TODO: $(ls dotfilespath) ?
-dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc i3, .Xmodmap)
+dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc i3, .Xmodmap .xinitrc)
 
-destination=$1
+destination=$DIR
 dotfilesdir=$(dirname $(readlink -f $0))
 cleanup=$2
 
 # sanity check
-if [ ! -d $destination ]; then
-    printf "Setup path  %s is not a directory\n" $destination
+if [ ! -d $destination ] || [ -z $DIR ]; then
+	printf "Setup path ( %s ) is not provided or is not a directory\n" $destination
     exit -1
 fi
 
-printf "Dotfiles setup path: %s\n" $destination
+printf "dotfiles setup path: %s\n" $destination
 
 # dotwalk iterates over dot files and calls argument $0 function
 # passing target and link files as described in @ln
 function dotwalk() {
-    for item in ${dotfiles[*]}
-    do
-    	target="$dotfilesdir/$item"
-	link="$destination/$item"
+	if [ -n "$FILES" ]; then
+		printf "files list %s\n" $FILES
 
-	($1 "$target" "$link")
+		for file in ${FILES//,/ }
+		do
+			for dotfile in "${dotfiles[@]}"
+			do
+				if [ "$dotfile" == "$file" ] ; then
+					target="$dotfilesdir/$dotfile"
+					link="$destination/$dotfile"
+
+					($1 "$target" "$link")
+				fi
+			done
+		done
+
+		return
+	fi
+
+    for dotfile in ${dotfiles[*]}
+    do
+    	target="$dotfilesdir/$dotfile"
+		link="$destination/$dotfile"
+
+		($1 "$target" "$link")
     done
+
     echo "Total: ${#dotfiles[*]}"
 }
 
@@ -38,13 +84,13 @@ function install() {
     target="$1"
     link="$2"
 
-    if [ ! -f $target ] && [ ! -d $target ]; then
+    if [ ! -f "$target" ] && [ ! -d "$target" ]; then
         printf  "target does not exist %s\n" $target
 	return
     fi
 
-    if [ -L $link ]; then
-	printf 'link %s already exists\n' $link
+    if [ -L "$link" ] || [ -f "$link" ]; then
+	printf 'link %s or destination file already exists\n' $link
 	return
     fi
 
