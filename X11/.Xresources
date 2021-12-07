@@ -1,0 +1,68 @@
+! special
+*.foreground:   #c0c8cb
+*.background:   #101112
+*.cursorColor:  #c0c8cb
+
+! black
+*.color0:       #1a1c1d
+*.color8:       #9fbb4c
+
+! red
+*.color1:       #232425
+*.color9:       #bb7a3b
+
+! green
+*.color2:       #333637
+*.color10:      #3d957b
+
+! yellow
+*.color3:       #494d4f
+*.color11:      #f2a156
+
+! blue
+*.color4:       #666a6c
+*.color12:      #7f9348
+
+! magenta
+*.color5:       #878d90
+*.color13:      #4d9680
+
+! cyan
+*.color6:       #aeb6b9
+*.color14:      #cf8d53
+
+! white
+*.color7:       #dfe3e5
+*.color15:      #a679dd
+
+Xft.dpi: 96
+URxvt.font:xft:JetBrains Mono Regular Nerd Font Complete:pixelsize=15
+URxvt.letterSpace: -1
+URxvt.lineSpace: 1.2
+URxvt.borderLess: false
+URxvt.externalBorder: 1
+URxvt.internalBorder: 4
+URxvt.imLocale: en_US-UTF-8
+
+URxvt.scrollBar: false
+URxvt.saveLines: 5000
+
+URxvt.perl-ext-common: default,tabbedex,matcher
+
+URxvt.keysym.Control-Shift-N: perl:tabbedex:new_tab
+URxvt.keysym.Control-Shift-K: perl:tabbedex:next_tab
+URxvt.keysym.Control-Shift-J: perl:tabbedex:prev_tab
+
+URxvt.keysym.Control-Shift-R: perl:tabbedex:rename_tab
+URxvt.keysym.Control-Shift-H: perl:tabbedex:move_tab_left
+URxvt.keysym.Control-Shift-L: perl:tabbedex:move_tab_right
+
+URxvt.tabbedex.tabbar-fg: 15
+URxvt.tabbedex.tabbar-bg: 236
+URxvt.tabbedex.tab-fg: 110
+URxvt.tabbedex.tab-bg: 236
+
+URxvt.tabbedex.transparent: true
+URxvt.tabbedex.new-button: false
+
+URxvt.keysym.Meta-V: eval:paste_clipboard
