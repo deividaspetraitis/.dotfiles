@@ -208,3 +208,6 @@ bindsym $mod+CTRL+Shift+l exec "i3lock -i ~/Documents/Wallpapers/lock.png"
 
 # set wallpaper for X11
 exec --no-startup-id feh --no-fehbg --bg-fill ~/Documents/Wallpapers/workspace.png
+
+# make the color of the display adapt to the time of the day
+exec --no-startup-id fluxgui
