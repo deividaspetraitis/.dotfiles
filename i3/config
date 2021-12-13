@@ -210,4 +210,5 @@ bindsym $mod+CTRL+Shift+l exec "i3lock -i ~/Documents/Wallpapers/lock.png"
 exec --no-startup-id feh --no-fehbg --bg-fill ~/Documents/Wallpapers/workspace.png
 
 # make the color of the display adapt to the time of the day
-exec --no-startup-id fluxgui
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+exec --no-startup-id redshift-gtk
