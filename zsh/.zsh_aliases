@@ -1,0 +1,3 @@
+alias ll="ls -lah"
+alias d="dirs -v"
+for index ({1..100}) alias "$index"="cd +${index}"; unset index

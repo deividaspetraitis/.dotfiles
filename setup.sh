@@ -26,13 +26,17 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+
 # dotfiles is a list of dotfiles to be maintained by this script
 # TODO: $(ls dotfilespath) ?
-dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc i3, .Xmodmap .xinitrc)
+dotfiles=(.gitconfig .tmux.conf .vim .vimrc nvim .zplugrc .zshrc i3, .Xmodmap .xinitrc zsh)
 
 destination=$DIR
 dotfilesdir=$(dirname $(readlink -f $0))
 cleanup=$2
+
+# Initialize zsh
+ln -sf "$dotfilesdir/zsh/.zshenv" "$HOME/.zshenv"
 
 # sanity check
 if [ ! -d $destination ] || [ -z $DIR ]; then
