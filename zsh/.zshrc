@@ -2,31 +2,9 @@
 # Plugins
 # ---------------------------------------------
 
-# zplug plugin manager
-source ~/.zplug/init.zsh
-
-zplug "zpm-zsh/colorize"
-
-# zplug "Tarrasch/zsh-command-not-found"
-
-zplug "zsh-users/zsh-autosuggestions"
-
-# Fish shell-like syntax highlighting for Zsh
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-
-# 10k theme
-zplug romkatv/powerlevel10k, as:theme, depth:1
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Then, source plugins and add commands to $PATH
-zplug load --verbose
+# zplug configuration 
+# Above p10k since plugins may perform console I/O after the instant prompt preamble
+[ -f ~/.config/zsh/.zplugrc ] && source ~/.config/zsh/.zplugrc
 
 # ------------------------------------------------------------------------------------------
 # Put things above p10k that may perform console I/O after the instant prompt preamble

@@ -1,13 +1,20 @@
 # zplug plugin manager
-export ZPLUG_HOME=/usr/local/opt/zplug
+source ~/.zplug/init.zsh
 
-source $ZPLUG_HOME/init.zsh
+zplug "zpm-zsh/colorize"
 
-# Load theme file
-zplug romkatv/powerlevel10k, as:theme, depth:1
+# zplug "Tarrasch/zsh-command-not-found"
+
+zplug "zsh-users/zsh-autosuggestions"
+
+# Fish shell-like syntax highlighting for Zsh
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Quoter plugin
 zplug "owenvoke/quoter-zsh"
+
+# 10k theme
+zplug romkatv/powerlevel10k, as:theme, depth:1
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
