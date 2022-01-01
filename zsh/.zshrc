@@ -1,9 +1,3 @@
-# Attach to or start a new tmux session
-if [[ -z "$TMUX" ]]; then
-	tmux attach || tmux new-session
-fi
-
-
 # ---------------------------------------------
 # Plugins
 # ---------------------------------------------
@@ -99,3 +93,8 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+
+# Attach to or start a new tmux session
+if pgrep i3 > /dev/null 2>&1 && [[ -z "$TMUX" ]]; then
+	tmux attach || tmux new-session
+fi
