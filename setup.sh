@@ -38,6 +38,9 @@ cleanup=$2
 # Initialize zsh
 ln -sf "$dotfilesdir/zsh/.zshenv" "$HOME/.zshenv"
 
+# Copy fonts
+cp -rf "$dotfilesdir/fonts" "$XDG_DATA_HOME"
+
 # sanity check
 if [ ! -d $destination ] || [ -z $DIR ]; then
 	printf "Setup path ( %s ) is not provided or is not a directory\n" $destination

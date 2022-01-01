@@ -1,16 +1,16 @@
 ! Color scheme is determined via zsh themes
 
 Xft.dpi: 96
-URxvt.font:xft:JetBrains Mono Regular Nerd Font Complete:pixelsize=12
-URxvt.letterSpace: -1
+URxvt.font:xft:JetBrainsMono Nerd Font Mono:size=10:pixelsize=13:antialias=true
+URxvt.letterSpace: 1
 URxvt.lineSpace: 1.2
 URxvt.borderLess: false
 URxvt.externalBorder: 1
 URxvt.internalBorder: 4
-URxvt.imLocale: en_US-UTF-8
-
 URxvt.scrollBar: false
 URxvt.saveLines: 5000
+
+URxvt.imLocale: en_US.utf8
 
 URxvt.keysym.Meta-V: eval:paste_clipboard
 

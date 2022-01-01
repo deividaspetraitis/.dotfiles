@@ -7,6 +7,9 @@ export XDG_DATA_HOME="$XDG_CONFIG_HOME/local/share"
 # For cached files
 export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
 
+# Dotfiles path
+export DOTDIR="$HOME/.dotfiles"
+
 # Default editor
 export EDITOR="nvim"
 export VISUAL="nvim"
