@@ -159,9 +159,13 @@ for_window [class="Arandr"] floating enable
 for_window [instance="1password" class="1Password"] floating enable
 for_window [instance="vlc" class="vlc"] floating enable
 
-for_window [instance="htop_scratchpad"] move to scratchpad, border none
-bindsym $mod+Shift+p [instance="htop_scratchpad"] scratchpad show 
-exec urxvtc -name htop_scratchpad -e htop
+for_window [class="1Password"] move to scratchpad, resize set 640 480
+bindsym $mod+Shift+p [class="1Password"] scratchpad show 
+exec --no-startup-id 1password
+
+#for_window [instance="1password_scratchpad"] move to scratchpad, border none
+#bindsym $mod+Shift+p [instance="1password_scratchpad"] scratchpad show 
+#exec urxvtc -name 1password_scratchpad -e 1password --toggle
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
