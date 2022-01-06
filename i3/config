@@ -9,7 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod4
+set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -91,25 +91,8 @@ bindsym $mod+CTRL+h split h
 # split in vertical orientation
 bindsym $mod+CTRL+v split v
 
-# enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
-
-# change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-bindsym $mod+a focus parent
-
-# focus the child container
-#bindsym $mod+d focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -183,13 +166,75 @@ mode "$mode_system" {
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
-
 bindsym $mod+BackSpace mode "$mode_system"
+
+# Press $mod+o followed by either f, t, Escape or Return to launch firefox,
+# thunderbird or return to the default mode, respectively.
+set $mode_launcher Launch: [f]irefox [t]hunderbird
+bindsym $mod+o mode "$mode_launcher"
+
+mode "$mode_launcher" {
+    bindsym f exec firefox, mode "default"
+    bindsym t exec thunderbird, mode "default"
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+# Press $mod+[a]rrangement to change container layout (stacked, tabbed, toggle split)
+set $mode_layout Arrangement: [s]taking [w]tabbed [e]toggle split
+bindsym $mod+a mode "$mode_layout"
+
+mode "$mode_layout" {
+    bindsym s layout stacking
+    bindsym w layout tabbed
+    bindsym e layout toggle split
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+# Press $mod+[s]plit to change split orientation
+set $mode_split Split: [v]ertical [h]orizontal
+bindsym $mod+s mode "$mode_split"
+
+mode "$mode_split" {
+    bindsym v split v, mode "default"
+    bindsym h split h, mode "default"
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
+
+# Press $mod+[s]plit to change split orientation
+set $mode_focus Focus [b]rowser [f]ullscreen [t]erminal [m]ail
+bindsym $mod+f mode "$mode_focus"
+
+mode "$mode_focus" {
+	# enter fullscreen mode for the focused container
+	bindsym f fullscreen toggle, mode "default"
+
+	# change focus between tiling / floating windows
+	bindsym space focus mode_toggle
+
+	# focus the parent container
+	bindsym a focus parent, mode "default"
+
+	# focus the child container
+	bindsym d focus child, mode "default"
+
+	# should we make classes as variables?
+    bindsym b [class="firefox"] focus, mode "default"
+    bindsym t [class="URxvt"] focus, mode "default"
+    bindsym m [class="Thunderbird"] focus, mode "default"
+
+    bindsym Escape mode "default"
+    bindsym Return mode "default"
+}
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
-
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
