@@ -2077,6 +2077,7 @@ c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'wa': 'https:/
 # c.zoom.text_only = False
 
 ## Bindings for normal mode
+config.bind('\\', 'spawn --userscript qute_1pass.py fill_credentials --cache-session')
 # config.bind("'", 'mode-enter jump_mark')
 # config.bind('+', 'zoom-in')
 # config.bind('-', 'zoom-out')
