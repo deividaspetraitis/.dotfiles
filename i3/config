@@ -102,10 +102,10 @@ bindsym $mod+0x27 exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
+set $ws1 "1:utilities"
+set $ws2 "2:editor"
+set $ws3 "3:browser"
+set $ws4 "4:mail"
 set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
@@ -114,16 +114,16 @@ set $ws9 "9"
 set $ws10 "10"
 
 # switch to workspace
-bindsym $mod+1 workspace number $ws1
-bindsym $mod+2 workspace number $ws2
-bindsym $mod+3 workspace number $ws3
-bindsym $mod+4 workspace number $ws4
-bindsym $mod+5 workspace number $ws5
-bindsym $mod+6 workspace number $ws6
-bindsym $mod+7 workspace number $ws7
-bindsym $mod+8 workspace number $ws8
-bindsym $mod+9 workspace number $ws9
-bindsym $mod+0 workspace number $ws10
+bindsym $mod+1 workspace $ws1; exec [ $(ps h -C slack | wc -l) = 0 ] && /usr/bin/slack
+bindsym $mod+2 workspace $ws2; exec [ $(ps h -C urxvt | wc -l) = 0 ] && /usr/bin/urxvt
+bindsym $mod+3 workspace $ws3; exec [ $(ps h -C qutebrowser | wc -l) = 0 ] && /usr/bin/qutebrowser
+bindsym $mod+4 workspace $ws4; exec [ $(ps h -C thunderbird | wc -l) = 0 ] && /usr/bin/thunderbird
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -176,12 +176,12 @@ bindsym $mod+BackSpace mode "$mode_system"
 
 # Press $mod+o followed by either f, t, Escape or Return to launch firefox,
 # thunderbird or return to the default mode, respectively.
-set $mode_launcher Launch: [b]rowser [t]mail [s]lack
+set $mode_launcher Launch: [b]rowser [m]ail [s]lack
 bindsym $mod+o mode "$mode_launcher"
 
 mode "$mode_launcher" {
     bindsym b exec qutebrowser, mode "default"
-    bindsym t exec thunderbird, mode "default"
+    bindsym m exec thunderbird, mode "default"
     bindsym s exec slack, mode "default"
 
     bindsym Escape mode "default"
