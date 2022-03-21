@@ -1,0 +1,4 @@
+# Attach to or start a new tmux session
+if pgrep i3 > /dev/null 2>&1 && [[ -z "$TMUX" ]]; then
+	tmux attach || tmux new-session
+fi
