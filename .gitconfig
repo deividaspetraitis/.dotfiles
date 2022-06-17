@@ -1,10 +1,16 @@
 [user]
-	name = deividaspetraitis
+	name = Deividas Petraitis
 	email = hi@deividaspetraitis.lt
+
 [core]
 	autocrlf = input
 	excludesFile = ~/.gitignore
+
 [interactive]
 	diffFilter = diff-highlight
+
 [pager]
 	diff = diff-highlight | less
+
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
