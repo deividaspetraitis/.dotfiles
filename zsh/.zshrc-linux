@@ -1,3 +1,19 @@
+# Autocompletion + history backward search
+if [ $(command -v "fzf") ]; then
+	source /usr/share/fzf/completion.zsh
+	source /usr/share/fzf/key-bindings.zsh
+else
+	echo "NOTICE: fzf command not found. Not all functions will be available e.g. history backward search"
+fi
+
+# Start the agent automatically and make sure that only one ssh-agent process runs at a time
+if ! pgrep -u "$USER" ssh-agent > /dev/null; then
+    ssh-agent -t 12h > "$XDG_RUNTIME_DIR/ssh-agent.env"
+fi
+if [[ ! "$SSH_AUTH_SOCK" ]]; then
+    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
+fi
+
 # Attach to or start a new tmux session
 if pgrep i3 > /dev/null 2>&1 && [[ -z "$TMUX" ]]; then
 	tmux attach || tmux new-session

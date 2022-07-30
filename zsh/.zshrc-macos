@@ -1,3 +1,22 @@
+# Brew bins
+export PATH="/opt/homebrew/bin:${PATH}"
+
+# brew executable
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# For commits signing otherwise will lead to:
+# error: gpg failed to sign the data
+# fatal: failed to write commit object
+export GPG_TTY=$(tty)
+
+# Autocompletion + history backward search
+if [ $(command -v "fzf") ]; then
+	source /opt/homebrew/Cellar/fzf/0.30.0/shell/completion.zsh
+	source /opt/homebrew/Cellar/fzf/0.30.0/shell/key-bindings.zsh
+else
+	echo "NOTICE: fzf command not found. Not all functions will be available e.g. history backward search"
+fi
+
 # Attach to or start a new tmux session
 if [[ -z "$TMUX" ]]; then
 	tmux attach || tmux new-session

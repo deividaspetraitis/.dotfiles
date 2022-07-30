@@ -1,3 +1,7 @@
+# This sets the environment for interactive shells.
+# This gets loaded after .zprofile.
+# It's typically a place where you "set it and forget it" type of parameters like $PATH, $PROMPT, aliases, and functions you would like to have in both login and interactive shells.
+#
 # ---------------------------------------------
 # Plugins
 # ---------------------------------------------
@@ -25,26 +29,13 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 
-# Navigate menu using hklj
-zmodload zsh/complist
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'j' vi-down-line-or-history
-
-autoload -U compinit; compinit;
-
 # Directory external contains external scripts 
 fpath=($ZDOTDIR/external $fpath)
 
-# Autocomplete hidden files
-_comp_options+=(globdots)
-source ~/.dotfiles/zsh/external/completion.zsh
-
-autoload -Uz prompt_purification_setup; prompt_purification_setup
-
 # Enable Vi mode
 bindkey -v
+bindkey "^?" backward-delete-char # Fix modes N -> I -> I backspace  not working
+
 export KEYTIMEOUT=1 # timeout for switching between INSERT/NORMAL modes
 
 # Enable CTRL-P CTRL-N
@@ -59,15 +50,8 @@ autoload -Uz edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v edit-command-line
 
-# 
-source ~/.dotfiles/zsh/external/bd.zsh
-
-# autocomplete-sucks mode
-# tweak or remove useless thing!
-if [ $(command -v "fzf") ]; then
-	source /usr/share/fzf/completion.zsh
-	source /usr/share/fzf/key-bindings.zsh
-fi
+# Disable first autocompletion on TAB 
+setopt noautomenu
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh

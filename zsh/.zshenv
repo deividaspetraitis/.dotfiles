@@ -37,14 +37,6 @@ fi
 export GOPATH=$HOME/go
 export PATH=$PATH:$HOME/go/bin
 
-# Start the agent automatically and make sure that only one ssh-agent process runs at a time
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    ssh-agent -t 12h > "$XDG_RUNTIME_DIR/ssh-agent.env"
-fi
-if [[ ! "$SSH_AUTH_SOCK" ]]; then
-    source "$XDG_RUNTIME_DIR/ssh-agent.env" >/dev/null
-fi
-
 # Autocompletion
 autoload -U compinit; compinit -d "$XDG_CACH_HOME/zsh/.zcompdump";
 
