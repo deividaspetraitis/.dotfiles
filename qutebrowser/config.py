@@ -2077,7 +2077,7 @@ c.url.searchengines = {'DEFAULT': 'https://www.google.com/search?q={}', 'ddg': '
 # c.zoom.text_only = False
 
 ## Bindings for normal mode
-config.bind('\\', 'spawn --userscript qute_1pass.py fill_credentials --cache-session')
+config.bind('\\', 'spawn --userscript qute_1pass.sh')
 # config.bind("'", 'mode-enter jump_mark')
 # config.bind('+', 'zoom-in')
 # config.bind('-', 'zoom-out')
