@@ -1,0 +1,3 @@
+[submodule "nvim/PrivateSnips"]
+	path = nvim/PrivateSnips
+	url = git@github.com:deividaspetraitis/PrivateSnips.git
