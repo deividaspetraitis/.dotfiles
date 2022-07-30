@@ -50,11 +50,28 @@ Plugin 'kshenoy/vim-signature'
 " Peekaboo will show you the contents of the registers on the sidebar when you hit " or @ in normal mode or <CTRL-R> in insert mode
 Plugin 'junegunn/vim-peekaboo'
 
+" Tree-sitter is a parser generator tool and an incremental parsing library.
+" It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. 
+Plugin 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
 " Telescope.nvim is a highly extendable fuzzy finder over lists.
 Plugin 'nvim-lua/popup.nvim'
 Plugin 'nvim-lua/plenary.nvim'
 Plugin 'nvim-telescope/telescope.nvim'
 Plugin 'nvim-telescope/telescope-fzy-native.nvim'
+
+" Focus on the task and temporarily disable the distraction elements in Neovim
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim' " dim all lines except the current line when turned on.
+
+" More Pleasant Editing on Commit Message
+Plugin 'rhysd/committia.vim'
+
+" VimWiki is a personal wiki for Vim
+Plugin 'vimwiki/vimwiki'
+
+" Fugitive is the premier Vim plugin for Git
+Plugin 'tpope/vim-fugitive'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -95,20 +112,10 @@ filetype plugin indent on
 " Enable syntax highlighting
 syntax on
 
-" Vim-Go Plugin
-" let g:go_highlight_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_function_calls = 1
-" let g:go_highlight_extra_types = 1
-" 
-" let g:go_highlight_structs = 1
-" let g:go_highlight_methods = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_operators = 1
-" let g:go_highlight_build_constraints = 1
-" 
-" let g:go_def_mode = 'gopls'
-" let g:go_debug=['lsp']
+" Enable spell checking
+set spell
+
+set tabpagemax=100
 
 " Set leader key
 nnoremap <SPACE> <Nop>
@@ -213,10 +220,91 @@ nmap <F6> :NERDTreeToggle<CR>
 " Telescope plugin settings
 
 " Using lua functions
-nnoremap <C-p> <cmd>lua require('telescope.builtin').git_files()<cr>
+nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+" Committia plugin settings
+" You can get the information about the windows with first argument as a dictionary.
+"
+"   KEY              VALUE                      AVAILABILITY
+"-----------------------------------------------------------------------------------
+"   vcs            : vcs type (e.g. 'git')   -> all hooks
+"   edit_winnr     : winnr of edit window    -> ditto
+"   edit_bufnr     : bufnr of edit window    -> ditto
+"   diff_winnr     : winnr of diff window    -> ditto
+"   diff_bufnr     : bufnr of diff window    -> ditto
+"   status_winnr   : winnr of status window  -> all hooks except for 'diff_open' hook
+"   status_bufnr   : bufnr of status window  -> ditto
+
+let g:committia_hooks = {}
+function! g:committia_hooks.edit_open(info)
+    " Additional settings
+    setlocal spell
+
+    " If no commit message, start with insert mode
+    if a:info.vcs ==# 'git' && getline(1) ==# ''
+        startinsert
+    endif
+
+    " Scroll the diff window from insert mode
+    " Map <C-n> and <C-p>
+    imap <buffer><C-n> <Plug>(committia-scroll-diff-down-half)
+    imap <buffer><C-p> <Plug>(committia-scroll-diff-up-half)
+endfunction
+
+" UltiSnips configuration
+" -------------------------------------------------------------------------
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "DeividasSnips"]
+
+" Vim HardTime
+" -------------------------------------------------------------------------
+" Turn on enjoyment of Vim experience
+let g:hardtime_default_on = 1
+
+" Tmux + Vim configuration
+function! TmuxMove(direction)
+  let wnr = winnr()
+  silent! execute 'wincmd ' . a:direction
+  " If the winnr is still the same after we moved,
+  " it is the last pane
+	if wnr == winnr()
+	  call system('tmux select-pane -' .  tr(a:direction, 'phjkl', 'lLDUR'))
+	end
+endfunction
+
+" Vimwiki settings
+" --------------------------------------------------------------------------
+
+" :help vimwiki-global-mappings
+" :help vimwiki-local-mappings
+" most of these mappings are random and not in use
+" I do not like how these conflicts with my own mappings
+nmap <leader>vw <Plug>VimwikiIndex
+nmap <leader>vwt <Plug>VimwikiTabIndex
+nmap <leader>vws <Plug>VimwikiUISelect
+nmap <leader>vwi <Plug>VimwikiDiaryIndex
+nmap <leader>vwww <Plug>VimwikiMakeDiaryNote
+nmap <leader>vd <Plug>VimwikiDiaryGenerateLinks
+nmap <leader>va <Plug>VimwikiTabMakeDiaryNote
+nmap <leader>vb <Plug>VimwikiMakeYesterdayDiaryNote
+nmap <leader>vc <Plug>VimwikiMakeTomorrowDiaryNote
+
+" lists settings
+let g:vimwiki_list = [{
+	\ 'path': '~/vimwiki/',
+	\ 'custom_wiki2html': '~/.dotfiles/vimwiki/pandoc_md2html.py',
+    \ 'syntax': 'markdown', 'ext': '.md'
+	\ }]
 
 "###########################################################################
 " Mappings
@@ -248,16 +336,22 @@ nnoremap <Leader>w :w<CR>
 " ! - prevents jumping to the first match
 nnoremap <Leader>F :grep! -rn . -e '<C-R><C-W>'<CR><CR> \| :copen <CR>
 
-" TODO:
-" Windows management
-nnoremap <Leader>\| <C-W>v
-nnoremap <Leader>- <C-W>s
+" Window splitting
+nnoremap <Leader>l :set splitright<CR> <C-W>v
+nnoremap <Leader>h :set nosplitright<CR> <C-W>v
+nnoremap <Leader>j :set splitbelow<CR> <C-W>s
+nnoremap <Leader>k :set nosplitbelow<CR> <C-W>s
 
-nnoremap <Leader>r :source ~/.vimrc <CR>
+nnoremap <Leader>r :source $DOTDIR/nvim/init.vim <CR>
 
 " Vim sessions management
 exec 'nnoremap <Leader>ss :mks! ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
 exec 'nnoremap <Leader>sr :so ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
+
+nnoremap <silent> <C-h> :call TmuxMove('h')<cr>
+nnoremap <silent> <C-j> :call TmuxMove('j')<cr>
+nnoremap <silent> <C-k> :call TmuxMove('k')<cr>
+noremap <silent> <C-l> :call TmuxMove('l')<cr>
 
 "###########################################################################
 " General Autocmd's
@@ -265,40 +359,3 @@ exec 'nnoremap <Leader>sr :so ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
 " NOTE: File specific cmd's goes into: ~/.vim/ftplugin/{filetype}_whatever.vim
 "###########################################################################
 " Plugin(s) settings
-
-" UltiSnips configuration
-" -------------------------------------------------------------------------
-" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
-" - https://github.com/Valloric/YouCompleteMe
-" - https://github.com/nvim-lua/completion-nvim
-let g:UltiSnipsExpandTrigger="<c-j>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-" Vim HardTime
-" -------------------------------------------------------------------------
-" Turn on enjoyment of Vim experience
-let g:hardtime_default_on = 1
-
-" Tmux + Vim configuration
-function! TmuxMove(direction)
-  let wnr = winnr()
-  silent! execute 'wincmd ' . a:direction
-  " If the winnr is still the same after we moved,
-  " it is the last pane
-	if wnr == winnr()
-	  call system('tmux select-pane -' .  tr(a:direction, 'phjkl', 'lLDUR'))
-	end
-endfunction
-
-nnoremap <silent> <C-Left> :call TmuxMove('h')<cr>
-nnoremap <silent> <C-Down> :call TmuxMove('j')<cr>
-nnoremap <silent> <C-Up> :call TmuxMove('k')<cr>
-nnoremap <silent> <C-Right> :call TmuxMove('l')<cr>
-
-nnoremap <silent> <C-h> :call TmuxMove('h')<cr>
-nnoremap <silent> <C-j> :call TmuxMove('j')<cr>
-nnoremap <silent> <C-k> :call TmuxMove('k')<cr>
-noremap <silent> <C-l> :call TmuxMove('l')<cr>
