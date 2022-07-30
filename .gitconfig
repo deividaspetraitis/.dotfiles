@@ -6,11 +6,23 @@
 	autocrlf = input
 	excludesFile = ~/.gitignore
 
-[interactive]
-	diffFilter = diff-highlight
-
-[pager]
-	diff = diff-highlight | less
+ [includeIf "gitdir:~/work/"]
+	path = ~/work/.gitconfig
 
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
+
+[diff]
+	tool = nvimdiff
+
+[alias]
+	d = difftool
+
+	# Files will produce a list of files changed between current branch HEAD and REVIEW_BASE.
+	# REVIEW_BASE is ENV variable with default value set in .zshenv
+	files = !git --no-pager diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+
+	# Same as files, but provides changes stats on each changed file.
+	stat = !git --no-pager diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
+
+	review = !nvim -p $(git files) -c \"tabdo Gvdiffsplit staging\"
