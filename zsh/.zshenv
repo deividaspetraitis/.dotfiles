@@ -34,8 +34,13 @@ if [ -f "$HOME/.zsh_aliases" ]; then
 	source "$HOME/.zsh_aliases"
 fi
 
+# Custom gpg cache
+. "$ZDOTDIR/external/gpg_cache.zsh"
+
 export GOPATH=$HOME/go
 export PATH=$PATH:$HOME/go/bin
+
+export SSH_AUTH_SOCK="~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
 # Autocompletion
 autoload -U compinit; compinit -d "$XDG_CACH_HOME/zsh/.zcompdump";

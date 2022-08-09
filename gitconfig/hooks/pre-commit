@@ -1,0 +1,15 @@
+# vim: filetype=sh
+
+# If any command fails, exit immediately with that command's exit status
+set -eo pipefail
+
+# Import custom gpg cache function
+. "$ZDOTDIR/external/gpg_cache.zsh"
+
+# Cache commits GPG signing key
+gpg_cache 7kejs7ripamgu5wilncccwduaa
+
+# Import git nocommit function
+. "$DOTDIR/gitconfig/hooks/scripts/nocommit.zsh"
+
+# nocommit

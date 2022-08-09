@@ -2,9 +2,17 @@
 	name = Deividas Petraitis
 	email = hi@deividaspetraitis.lt
 
+[commit]
+    gpgsign = true
+
+# Not working on MacOS
+#[gpg]
+#    format = ssh
+
 [core]
 	autocrlf = input
 	excludesFile = ~/.gitignore
+	hooksPath = ~/.dotfiles/gitconfig/hooks
 
  [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
