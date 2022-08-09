@@ -1,7 +1,7 @@
 [user]
 	name = Deividas Petraitis
 	email = hi@deividaspetraitis.lt
-	signingkey = E4E00F365FEFE840
+	signingkey = 90A2C4FB7CFC019C
 
 [commit]
     gpgsign = true
