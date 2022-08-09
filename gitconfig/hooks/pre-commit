@@ -7,7 +7,7 @@ set -eo pipefail
 . "$ZDOTDIR/external/gpg_cache.zsh"
 
 # Cache commits GPG signing key
-gpg_cache 7kejs7ripamgu5wilncccwduaa
+gpg_cache 64yfdeckzy5yltmqtjesddktyq
 
 # Import git nocommit function
 . "$DOTDIR/gitconfig/hooks/scripts/nocommit.zsh"

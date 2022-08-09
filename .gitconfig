@@ -1,13 +1,10 @@
 [user]
 	name = Deividas Petraitis
 	email = hi@deividaspetraitis.lt
+	signingkey = E762955AAC82E4BE
 
 [commit]
     gpgsign = true
-
-# Not working on MacOS
-#[gpg]
-#    format = ssh
 
 [core]
 	autocrlf = input
