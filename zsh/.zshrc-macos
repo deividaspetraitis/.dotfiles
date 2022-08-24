@@ -11,8 +11,8 @@ export GPG_TTY=$(tty)
 
 # Autocompletion + history backward search
 if [ $(command -v "fzf") ]; then
-	source /opt/homebrew/Cellar/fzf/0.30.0/shell/completion.zsh
-	source /opt/homebrew/Cellar/fzf/0.30.0/shell/key-bindings.zsh
+	source /opt/homebrew/opt/fzf/shell/completion.zsh
+	source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 else
 	echo "NOTICE: fzf command not found. Not all functions will be available e.g. history backward search"
 fi
