@@ -4,7 +4,7 @@
 # Basic settings
 
 # Server or workstation mode
-davmail.server=true
+davmail.server=false
 # Exchange/Office 365 connection mode:
 # - O365Modern Office 365 modern authentication (Oauth2)
 # - O365Interactive Office 365 with interactive browser window, not available in headless mode (OpenJFX required)
@@ -13,7 +13,7 @@ davmail.server=true
 # - EWS Exchange 2007 and later
 # - WebDav Exchange 2007 and earliear WebDav mode
 # - Auto WebDav mode with EWS failover
-davmail.mode=EWS
+davmail.mode=O365Manual
 # base Exchange OWA or EWS url
 davmail.url=https://outlook.office365.com/EWS/Exchange.asmx
 
@@ -24,8 +24,10 @@ davmail.ldapPort=1389
 davmail.popPort=1110
 davmail.smtpPort=1025
 
-# Optional: separate file to store Oauth tokens
-#davmail.oauth.tokenFilePath=
+davmail.oauth.tenantId=
+davmail.oauth.clientId=
+davmail.oauth.persistToken=true
+davmail.oauth.tokenFilePath=~/.davmail.token
 
 #############################################################
 # Network settings
@@ -117,7 +119,7 @@ davmail.smtpSaveInSent=true
 # Loggings settings
 
 # log file path, leave empty for default path
-davmail.logFilePath=/var/log/davmail.log
+davmail.logFilePath=
 # maximum log file size, use Log4J syntax, set to 0 to use an external rotation mechanism, e.g. logrotate
 davmail.logFileSize=1MB
 # log levels
