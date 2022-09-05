@@ -1,3 +1,6 @@
 [submodule "nvim/PrivateSnips"]
 	path = nvim/PrivateSnips
 	url = git@github.com:deividaspetraitis/PrivateSnips.git
+[submodule "neomutt/accounts"]
+	path = neomutt/accounts
+	url = git@github.com:deividaspetraitis/neomutt.git
