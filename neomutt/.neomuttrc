@@ -1,0 +1,77 @@
+set editor=nvim
+
+set imap_check_subscribed
+set mbox_type=Maildir
+
+## Sidebar
+
+# Set sidebar by default
+set sidebar_visible = yes
+
+# Should be enough
+set sidebar_width = 25
+
+# Pretty line-drawing character
+set sidebar_divider_char = '|'
+
+# For some of the format expandos to work this is required
+set mail_check_stats
+
+# Set sidebar format
+# mailbox [flagged] unread/total
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+
+# Toggle side-bar visibility with shortcut B
+bind index,pager B sidebar-toggle-visible
+
+# Move the highlight to the previous mailbox
+bind index,pager \CP sidebar-prev
+
+# Move the highlight to the next mailbox
+bind index,pager \Cn sidebar-next
+
+# Open the highlighted mailbox
+bind index,pager \CO sidebar-open
+
+# Store message headers locally to speed things up.
+# If hcache is a folder, Mutt will create sub cache folders for each account which may speeds things up even more.
+set header_cache = $DOTDIR/neomutt/cache/header
+
+# Store messages locally to speed things up, like searching message bodies.
+# Can be the same folder as header_cache.
+# This will cost important disk usage according to your e-mail amount.
+set message_cachedir = $DOTDIR/neomutt/cache/message
+
+# ------------------------------------------------------------
+# Modern configuration: threads keep date order, recently active thread last
+# (not possible with legacy configuration)
+#   Claire   12:06  thread 3
+#   Anne     12:01  cover letter for thread 1
+#   Anne     12:02  |->part 1 of thread 1
+#   Anne     12:03  |->part 2 of thread 1
+#   Diane    12:07  | `->re: part 2 of thread 1
+#   Anne     12:04  `->part 3 of thread 1
+#   Barbara  12:05  thread 2
+#   Erica    12:08  `->re: thread 2
+set use_threads=threads sort=last-date sort_aux=date
+
+# ------------------------------------------------------------
+# Accounts
+
+account-hook . 'unset imap_user; unset imap_pass; unset tunnel'
+
+# Decrypt account details file
+source "gpg -dq $HOME/.neomutt.gpg |"
+
+source $my_account_personal/acc
+mailboxes $folder
+folder-hook $folder  'source $my_account_personal/acc'
+
+source $my_account_work/acc
+mailboxes $folder
+account-hook $folder 'source $my_account_work/acc'
+
+macro index,pager <f2> '<sync-mailbox><enter-command>source $my_account_personal/acc<enter><change-folder>!<enter>'
+macro index,pager <f3> '<sync-mailbox><enter-command>source $my_account_work/acc<enter><change-folder>!<enter>'
+
+source $DOTDIR/neomutt/colors.neomutt
