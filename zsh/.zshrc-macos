@@ -18,6 +18,6 @@ else
 fi
 
 # Attach to or start a new tmux session
-if [[ -z "$TMUX" ]]; then
+if [[ -z "$TMUX" ]] && [[ -z "$SKIP_TMUX" ]]; then
 	tmux attach || tmux new-session
 fi

@@ -110,11 +110,19 @@
 :: default : echo default && sketchybar -m --set modal_indicator icon="N" --bar color="0xdd2a2f38"
 
 # focus window in bsp mode
-# TODO: should be able to focus on other modes as well?
-alt - h: $DOTDIR/yabai/focus_hjkl.sh h
-alt - j: yabai -m window --focus south
-alt - k: yabai -m window --focus north
-alt - l: $DOTDIR/yabai/focus_hjkl.sh l
+alt - h : yabai -m window --focus west || \
+		  yabai -m window --focus $(yabai -m query --spaces --display west | jq '.[] | select(."is-visible" == true) | ."last-window"')
+
+alt - j : yabai -m window --focus south || \
+		  yabai -m window --focus stack.next || \
+		  yabai -m window --focus stack.first
+
+alt - k : yabai -m window --focus north || \
+		  yabai -m window --focus stack.prev || \
+		   yabai -m window --focus stack.last
+
+alt - l : yabai -m window --focus east || \
+		  yabai -m window --focus $(yabai -m query --spaces --display east | jq '.[] | select(."is-visible" == true) | ."first-window"')
 
 # swap window
 shift + alt - h : yabai -m window --swap west
@@ -122,9 +130,13 @@ shift + alt - j : yabai -m window --swap south
 shift + alt - k : yabai -m window --swap north
 shift + alt - l : yabai -m window --swap east
 
+# focus monitor
+alt - 1 : yabai -m display --focus 1
+alt - 2 : yabai -m display --focus 2
+
 # move  window to monitor
-shift + alt - o : yabai -m window --display 2 ; yabai -m window --focus recent
-shift + alt - e : yabai -m window --display 1 ; yabai -m window --focus recent
+shift + alt - 1 : yabai -m window --display 1 ; yabai -m window --focus recent
+shift + alt - 2 : yabai -m window --display 2 ; yabai -m window --focus recent
 
 # toggle parent zoom
 alt - p : yabai -m window --toggle zoom-parent
@@ -140,9 +152,12 @@ alt - x : yabai -m window --toggle split
 #
 #
 # Auto VPN: https://osxdaily.com/2016/08/19/run-applescript-command-line-macos-osascript/
-#
-# open terminal, TODO: and focus!
-cmd - return : /Applications/iTerm.app/Contents/MacOS/iTerm2 ; 
+
+# open terminal
+cmd - return : open /System/Applications/Utilities/Terminal.app
+
+# open email
+cmd - m : ~/.dotfiles/yabai/scratchpad.sh email ; 
 
 # kill focused window
 alt + shift - q : skhd --key "cmd - w" ; yabai -m window --focus recent
@@ -190,7 +205,7 @@ focus < f: yabai -m window --toggle zoom-fullscreen ; skhd --key "escape"
 
 # focus app
 focus < b : yabai -m window $(yabai -m query --windows | jq -c '.[] | select(.title|test("qutebrowser$")) .id') --focus ; skhd --key "escape"
-focus < t : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( .app == "iTerm2" ) .id') --focus ; skhd --key "escape"
+focus < t : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( .app == "Terminal" ) .id') --focus ; skhd --key "escape"
 focus < m : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( .app == "Mail" ) .id') --focus ; skhd --key "escape"
 focus < c : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( (.app == "Microsoft Teams" ) and .level == 0 ) .id') --focus ; skhd --key "escape"
 
