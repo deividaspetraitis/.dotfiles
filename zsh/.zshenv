@@ -11,8 +11,8 @@ export XDG_CACHE_HOME="$XDG_CONFIG_HOME/cache"
 export DOTDIR="$HOME/.dotfiles"
 
 # Default editor
-export EDITOR="nvim"
-export VISUAL="nvim"
+export EDITOR="vim"
+export VISUAL="vim"
 
 # For Zsh config files
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -28,6 +28,12 @@ export SAVEHIST=100000
 
 # Aliases
 source "$ZDOTDIR/.zsh_aliases"
+
+# Setting rg as the default source for fzf
+export FZF_DEFAULT_COMMAND='rg --files'
+
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Machine specific aliases and/or containing sensitive information
 if [ -f "$HOME/.zsh_aliases" ]; then
