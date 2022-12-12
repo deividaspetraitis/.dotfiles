@@ -21,3 +21,6 @@ fi
 if [[ -z "$TMUX" ]] && [[ -z "$SKIP_TMUX" ]]; then
 	tmux attach || tmux new-session
 fi
+
+alias vim="/opt/homebrew/opt/vim/bin/vim"
+alias ctags=`brew --prefix`/bin/ctags
