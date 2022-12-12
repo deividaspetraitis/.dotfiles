@@ -1,0 +1,10 @@
+# This is global git excludes file which is intended point to location configured core.excludesfile option.
+# You can check current value of it by running:
+# git config --get core.excludesfile
+
+# Vim temporary files
+*~
+
+# Vim swap files
+.*.swp
+.*.swo
