@@ -5,16 +5,10 @@ filetype off
 " For some reason it solves issues with Vundle Plugin Manager
 set shell=/bin/bash
 
-" .vim contains ftype and other files
-set rtp+=~/.dotfiles/nvim
-
-set rtp+=~/.dotfiles/nvim/.vim
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
 filetype plugin indent on    " required
-"filetype plugin indent off
 
 "###########################################################################
 " Vim system settings
@@ -99,14 +93,24 @@ set exrc
 " Maintain undo history between sessions
 set undofile   
 
+" Keep a backup copy of a file when overwriting it.
+if has("vms")
+  set nobackup
+else
+  set backup
+  if has('persistent_undo')
+	set undofile
+  endif
+endif
+
 " When 'wildmenu' is on, command-line completion operates in an enhanced mode.
 set wildmenu
 
 " Dedicated directory for these undo history files
-set undodir=~/.vim/undodir
+" set undodir=~/.vim/undodir
 
 " Dedicated swap files directory ( instead of .swp files in project dir )
-set directory=~/.vim/swpdir//
+" set directory=~/.vim/swpdir//
 
 " Append working directory to the PATH, so we can use find to search project
 " files recursively.
@@ -126,7 +130,13 @@ set foldcolumn=2
 " While typing a search command, show where the pattern, as it was typed so far, matches.
 set incsearch
 
-set clipboard+=unnamedplus
+if system('uname -s') == "Darwin\n"
+  "OSX
+  set clipboard=unnamed 
+else
+  "Linux
+  set clipboard=unnamedplus
+endif
 
 " If you don't want to turn 'hlsearch' on, but want to highlight all
 " 	matches while searching, you can turn on and off 'hlsearch' with
@@ -141,5 +151,3 @@ augroup END
 " Turn off it.
 let g:C_Ctrl_j   = 'off'
 let g:C_Ctrl_k   = 'off'
-
-

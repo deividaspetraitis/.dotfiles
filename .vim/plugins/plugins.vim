@@ -63,13 +63,12 @@ Plugin 'tpope/vim-fugitive'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 
-
-
 "###########################################################################
 " Plugin(s) settings
 
-source $DOTDIR/nvim/plugins/papercolor.vim
-source $DOTDIR/nvim/plugins/committia.vim
-source $DOTDIR/nvim/plugins/ultisnips.vim
-source $DOTDIR/nvim/plugins/vimhardtime.vim
-source $DOTDIR/nvim/plugins/vimwiki.vim
+source $DOTDIR/.vim/plugins/papercolor.vim
+source $DOTDIR/.vim/plugins/committia.vim
+source $DOTDIR/.vim/plugins/ultisnips.vim
+source $DOTDIR/.vim/plugins/vimhardtime.vim
+source $DOTDIR/.vim/plugins/vimwiki.vim
+source $DOTDIR/.vim/plugins/tmux.vim
