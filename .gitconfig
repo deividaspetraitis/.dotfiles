@@ -18,16 +18,16 @@
 	insteadOf = https://github.com/
 
 [diff]
-	tool = nvimdiff
+	tool = vimdiff
 
 [alias]
 	d = difftool
 
 	# Files will produce a list of files changed between current branch HEAD and REVIEW_BASE.
 	# REVIEW_BASE is ENV variable with default value set in .zshenv
-	files = !git --no-pager diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+	files = !git git --no-pager diff --name-only -I ^vendor/ $(git merge-base HEAD \"$REVIEW_BASE\")
 
 	# Same as files, but provides changes stats on each changed file.
 	stat = !git --no-pager diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
 
-	review = !nvim -p $(git files) -c \"tabdo Gvdiffsplit staging\"
+	review = !vim -p $(git files) -c \"tabdo Gvdiffsplit staging\"
