@@ -94,27 +94,19 @@ set ruler
 " Enable project specific .vimrc
 set exrc
 
-" Maintain undo history between sessions
-set undofile   
-
 " Keep a backup copy of a file when overwriting it.
 if has("vms")
   set nobackup
 else
   set backup
   if has('persistent_undo')
+    " Maintain undo history between sessions
 	set undofile
   endif
 endif
 
 " When 'wildmenu' is on, command-line completion operates in an enhanced mode.
 set wildmenu
-
-" Dedicated directory for these undo history files
-" set undodir=~/.vim/undodir
-
-" Dedicated swap files directory ( instead of .swp files in project dir )
-" set directory=~/.vim/swpdir//
 
 " Append working directory to the PATH, so we can use find to search project
 " files recursively.
@@ -179,9 +171,10 @@ set ttimeoutlen=1
 
 " Plugin(s) settings
 source $DOTDIR/.vim/plugins/plugins.vim
-"
+
 "###########################################################################
 " Mappings
+"###########################################################################
 
 "This is how it worked before Vim 5.0. 
 " Otherwise the "Q" command starts Ex mode, but you will not need it.
@@ -211,6 +204,11 @@ noremap <silent> <C-l> :call TmuxMove('l')<cr>
 " Move visual selection
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" Tab for [t]abs
+nnoremap <Tab> gt
+nnoremap <S-Tab> gT
+nnoremap <silent> <S-t> :tabnew<CR>
 
 "###########################################################################
 " Custom Vim mappings using the leader key
