@@ -9,7 +9,85 @@ set shell=/bin/bash
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
+
+"###########################################################################
+" Plugin(s) settings
+"###########################################################################
+
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" Vim Hardtime helps you break that annoying habit vimmers have of scrolling up and down the page using jjjjj and kkkkk but without compromising the rest of our vim experience.
+Plugin 'takac/vim-hardtime'
+
+" YouCompleteMe: a code-completion engine for Vim
+Plugin 'ycm-core/YouCompleteMe'
+
+" UltiSnips is the ultimate solution for snippets in Vim. It has many features, speed being one of them. Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+
+" Minimal Vim Go formatter plugin
+" The contents of this plugin are pure copy-paste from the awesome vim-go repo.
+Plugin 'darrikonn/vim-gofmt'
+
+" Light & Dark color schemes for terminal and GUI Vim awesome editor
+" Inspired by Google's Material Design. Improve code readability! Great for presentation!
+Plugin 'NLKNguyen/papercolor-theme'
+
+" Repeat.vim remaps . in a way that plugins can tap into it.
+Plugin 'tpope/vim-repeat'
+
+" The plugin provides mappings to easily delete, change and add such surroundings in pairs.
+Plugin 'tpope/vim-surround'
+
+" A plugin to place, toggle and display marks
+Plugin 'kshenoy/vim-signature'
+
+" Peekaboo will show you the contents of the registers on the sidebar when you hit " or @ in normal mode or <CTRL-R> in insert mode
+Plugin 'junegunn/vim-peekaboo'
+
+" Tree-sitter is a parser generator tool and an incremental parsing library.
+" It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. 
+Plugin 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+
+" Telescope.nvim is a highly extendable fuzzy finder over lists.
+Plugin 'junegunn/fzf.vim'
+Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+" Focus on the task and temporarily disable the distraction elements in Neovim
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim' " dim all lines except the current line when turned on.
+
+" More Pleasant Editing on Commit Message
+Plugin 'rhysd/committia.vim'
+
+" VimWiki is a personal wiki for Vim
+Plugin 'vimwiki/vimwiki'
+
+" Fugitive is the premier Vim plugin for Git
+Plugin 'tpope/vim-fugitive'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
 filetype plugin indent on    " required
+
+"###########################################################################
+" Plugin(s) settings
+
+source $DOTDIR/.vim/plugins/papercolor.vim
+source $DOTDIR/.vim/plugins/committia.vim
+source $DOTDIR/.vim/plugins/ultisnips.vim
+source $DOTDIR/.vim/plugins/vimhardtime.vim
+source $DOTDIR/.vim/plugins/vimwiki.vim
+source $DOTDIR/.vim/plugins/tmux.vim
+source $DOTDIR/.vim/plugins/fzf.vim
 
 "###########################################################################
 " Vim system settings
@@ -20,6 +98,9 @@ filetype plugin indent on    " required
 " autocommands:
 " Remove ALL autocommands for the current group.
 autocmd!
+
+" Enable syntax highlighting
+syntax on
 
 " Flash screen instead of beep sound
 set visualbell
@@ -40,12 +121,7 @@ set shiftwidth=4
 set tabstop=4
 
 " Open pop up widow instead of opening split window
-set previewpopup=height:10,width:60,highlight:PMenuSbar
 set completeopt+=popup
-set completepopup=height:15,width:60,border:off,highlight:PMenuSbar
-
-" Enable syntax highlighting
-syntax on
 
 " Enable spell checking
 set spell
@@ -169,9 +245,6 @@ let g:C_Ctrl_k   = 'off'
 set ttimeout
 set ttimeoutlen=1
 
-" Plugin(s) settings
-source $DOTDIR/.vim/plugins/plugins.vim
-
 "###########################################################################
 " Mappings
 "###########################################################################
@@ -266,3 +339,4 @@ augroup END
 "
 " NOTE: File specific cmd's goes into: ~/.vim/ftplugin/{filetype}_whatever.vim
 "###########################################################################
+"
