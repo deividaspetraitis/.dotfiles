@@ -9,4 +9,3 @@ function! TmuxMove(direction)
 	  call system('tmux select-pane -' .  tr(a:direction, 'phjkl', 'lLDUR'))
 	end
 endfunction
-

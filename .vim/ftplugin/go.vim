@@ -1,9 +1,12 @@
 setlocal tabstop=4 shiftwidth=4 softtabstop=4
 
 " Spelling settings
-set spelllang=en_us
-set spellfile=~/.vim/spell/en_us.utf-8.add
-set spell
+setlocal spelllang=en_us
+setlocal spellfile=~/.vim/spell/en_us.utf-8.add
+setlocal spell
+
+" Filter 
+setlocal equalprg=gofmt
 
 " Set go fmt
 " augroup gofmt
@@ -19,8 +22,12 @@ nnoremap <silent><buffer> ]] m':call search('^\s*\(fu\%[nction]\\|def\)\>', "W")
 vnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*\(fu\%[nction]\\|def\)\>', "W")<CR>
 
 " YCM mappings, we want to make it to work close as possible to the defaults
-nnoremap gD :YcmCompleter GoToDeclaration <CR>
-nnoremap g] :YcmCompleter GoToReferences <CR>
-nnoremap <leader>gi :YcmCompleter GoToImplementation <CR>
-nnoremap <C-]> :YcmCompleter GoToDefinition <CR>
-nnoremap <C-w>} :YcmCompleter GetDoc <CR>
+
+nnoremap <silent><buffer> gD :YcmCompleter GoToDeclaration <CR>
+nnoremap <silent><buffer> g] :YcmCompleter GoToReferences <CR>
+nnoremap <silent><buffer> <leader>gi :YcmCompleter GoToImplementation <CR>
+nnoremap <silent><buffer> <C-]> :YcmCompleter GoToDefinition <CR>
+nnoremap <silent><buffer> <C-w>} :YcmCompleter GetDoc <CR>
+
+
+nnoremap <silent><buffer> <leader>l :Lint() <CR>

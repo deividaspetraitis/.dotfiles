@@ -9,11 +9,7 @@ set shell=/bin/bash
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
-
-"###########################################################################
-" Plugin(s) settings
-"###########################################################################
-
+" Plugin manager settings  ---------------------- {{{
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -77,10 +73,9 @@ Plugin 'tpope/vim-fugitive'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+" }}}
 
-"###########################################################################
-" Plugin(s) settings
-
+" Plugin(s) settings  ---------------------- {{{
 source $DOTDIR/.vim/plugins/papercolor.vim
 source $DOTDIR/.vim/plugins/committia.vim
 source $DOTDIR/.vim/plugins/ultisnips.vim
@@ -88,6 +83,8 @@ source $DOTDIR/.vim/plugins/vimhardtime.vim
 source $DOTDIR/.vim/plugins/vimwiki.vim
 source $DOTDIR/.vim/plugins/tmux.vim
 source $DOTDIR/.vim/plugins/fzf.vim
+source $DOTDIR/.vim/plugins/ycm.vim
+" }}}
 
 "###########################################################################
 " Vim system settings
@@ -130,20 +127,16 @@ set tabpagemax=100
 
 " Set leader key
 nnoremap <SPACE> <Nop>
-let mapleader = "\<Space>"
+let mapleader="\<Space>"
+let maplocalleader="\\"
 
 " Display line numbers
 set number
 
 " Set relative numbers
 set relativenumber
-" Enable relative numbers only in Normal mode, and absolute numbers only in Insert mode.
-" I don't actually like toggling
-" augroup toggle relative number
-" autocmd InsertEnter * :setlocal norelativenumber
-" autocmd InsertLeave * :setlocal relativenumber
 
-" Show status line
+" Status line  ---------------------- {{{
 set laststatus=2
 set statusline=
 set statusline +=%1*\ %n\ %*            "buffer number
@@ -154,6 +147,7 @@ set statusline +=%2*%m%*                "modified flag
 set statusline +=%1*%=%5l%*             "current line
 set statusline +=%2*/%L%*               "total lines
 set statusline +=%1*%4v\ %*             "virtual column number
+" }}}
 
 " Backspace fix
 set backspace=indent,eol,start
@@ -187,19 +181,7 @@ set wildmenu
 " Append working directory to the PATH, so we can use find to search project
 " files recursively.
 set path+=$PWD/**
-
-" Syntax folding
-" Folds are defined by syntax highlighting
-set foldmethod=syntax
-
-" By default set fold level start 1 just to be awere such functionallity
-" and employ it in daily work
-set foldlevelstart=1
-" :autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
-
-" Display a smalll column to visually indicate folds
-set foldcolumn=2
-
+"
 " While typing a search command, show where the pattern, as it was typed so far, matches.
 set incsearch
 
@@ -210,12 +192,10 @@ if !has("gui_running")
 endif
 
 " cursor shape based on mode
-let &t_SI = "\e[6 q" "SI = INSERT mode
-let &t_EI = "\e[2 q" "EI = NORMAL mode (ELSE)
+let &t_SI="\033[6 q" " start insert mode, blinking underline cursor
+let &t_EI="\033[2 q" " end insert mode, blinking block
 
 " TODO: does not work
-autocmd VimEnter * let &t_EI = "\e[6 q"
-autocmd VimLeave * let &t_EI = "\e[2 q"
 
 " yank to system clipboard 
 if system('uname -s') == "Darwin\n"
@@ -245,6 +225,8 @@ let g:C_Ctrl_k   = 'off'
 set ttimeout
 set ttimeoutlen=1
 
+set cpo-=<
+
 "###########################################################################
 " Mappings
 "###########################################################################
@@ -257,13 +239,12 @@ inoremap <C-U> <C-G>u<C-U>
 " NERDTree plugin specific commands
 " Toggle ON/OFF tree F6
 nmap <F6> :NERDTreeToggle<CR>
-
 " Show your next matched string at the center of the screen when you press n 
 " or N, so it is easier to identify your location in the file
 nnoremap n nzz 
 nnoremap N Nzz
 
-" Navigation between splits, instead of CTRL-W then J, it’s just CTRL-J
+" Navigation between splits  ---------------------- {{{
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
@@ -273,38 +254,51 @@ nnoremap <silent> <C-h> :call TmuxMove('h')<cr>
 nnoremap <silent> <C-j> :call TmuxMove('j')<cr>
 nnoremap <silent> <C-k> :call TmuxMove('k')<cr>
 noremap <silent> <C-l> :call TmuxMove('l')<cr>
+" }}}
 
-" Move visual selection
+" Move visual selection  ---------------------- {{{
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+" }}}
 
-" Tab for [t]abs
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
-
-"###########################################################################
-" Custom Vim mappings using the leader key
-" Defining a leader key is one of the best things you can do to boost your productivity in Vim.
-" You can define leader shortcuts for your most used commands.
-
+" Leader key mappings  ---------------------- {{{
 " Quick write shortcut
 nnoremap <Leader>w :w<CR>
-
-" Window splitting
-nnoremap <Leader>l :set splitright<CR> <C-W>v
-nnoremap <Leader>h :set nosplitright<CR> <C-W>v
-nnoremap <Leader>j :set splitbelow<CR> <C-W>s
-nnoremap <Leader>k :set nosplitbelow<CR> <C-W>s
-
-nnoremap <Leader>r :source ~/.vimrc <CR>
 
 " Same as fg but allows to open and edit non-existing file
 noremap <leader>gf :e <cfile><cr>
 
-" Vim sessions management
+" Tab for [t]abs
+" It is is not possible to remap <TAB> without effecting <C-]>
+nnoremap <Leader> <Tab> gt
+nnoremap <S-Tab> gT
+nnoremap <silent> <S-t> :tabnew<CR>
+" }}}
+
+" Vimrc related mappings  ---------------------- {{{
+nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <Leader>sv :source ~/.vimrc <CR>
+" }}}
+
+" Surround text object with X mappings  ---------------------- {{{
+vnoremap <Leader>' <esc>`<i'<esc>`>la'
+vnoremap <Leader>" <esc>`<i"<esc>`>la"
+" }}}
+
+" Disable arrow keys  ---------------------- {{{
+" Use hlkj instead!
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
+nnoremap <Right> <Nop>
+nnoremap <Left> <Nop>
+" }}}
+
+" Session management  ---------------------- {{{
+" ss for session save
 exec 'nnoremap <Leader>ss :mks! ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
+" sr for session restore
 exec 'nnoremap <Leader>sr :so ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
+" }}}
 
 " Display cursor line only in a active window.
 " https://codeyarns.com/tech/2013-02-07-how-to-show-cursorline-only-in-active-window-of-vim.html#gsc.tab=0
@@ -325,18 +319,100 @@ autocmd BufReadPost *
 " If you don't like this you can put this in your vimrc:
 " ":augroup vimHints | exe 'au!' | augroup END"
 augroup vimHints
-au!
-autocmd CmdwinEnter *
-  \ echohl Todo | 
-  \ echo 'You discovered the command-line window! You can close it with ":q".' |
-  \ echohl None
+  autocmd!
+  autocmd CmdwinEnter *
+    \ echohl Todo | 
+    \ echo 'You discovered the command-line window! You can close it with ":q".' |
+    \ echohl None
 augroup END
 
+" TODO:
 " Auto generate tags file on file write of *.c and *.h files
 " autocmd BufWritePost *.c,*.h,*.go silent! !ctags . &
+
+" Operator-pending mappings ---------------------- {{{
+onoremap in( :<c-u>normal! f(vi(<cr>
+onoremap il( :<c-u>normal! F)vi(<cr>
+
+onoremap in{ :<c-u>normal! ?{vi{<cr>
+
+augroup markdown_operators
+  autocmd!
+
+  autocmd FileType markdown onoremap <buffer> ih :<c-u>execute "normal! ?^==\\\|--\\+$\r:nohlsearch\rkvg_"<cr>
+augroup END
+" }}}
+
 "###########################################################################
 " General Autocmd's
 "
 " NOTE: File specific cmd's goes into: ~/.vim/ftplugin/{filetype}_whatever.vim
 "###########################################################################
-"
+
+" Vimscript file settings ---------------------- {{{
+augroup filetype_vim
+  autocmd!
+
+  " Folding ---------------------- {{{
+  autocmd FileType vim setlocal foldmethod=marker
+  autocmd FileType vim setlocal foldlevelstart=2
+  autocmd FileType vim set foldcolumn=2
+  " }}}
+augroup END
+" }}}
+
+" TODO: make should run in backgroud?
+function! Lint()
+	let &makeprg=golangci-lint
+    let &l:errformat="%f:%l:%c:\ %m,%f:%l:%c\ %#%m"
+	make | copen
+endfunction
+
+" Learning vim hard way
+echo ">^.^<"
+nnoremap <leader>jr :set makeprg=golangci-lint <CR> :set errformat='' <CR>:make \| redraw! <CR> :copen<CR>
+
+" Go file type settings ---------------------- {{{
+augroup filetype_go
+  autocmd!
+  " Commenting
+  " TODO: visual, multiple lines
+  " TODO: running second time should remove comment
+  autocmd FileType go nnoremap <buffer> <localleader>c I//<esc>
+  
+  " Syntax folding ---------------------- {{{
+  " Folds are defined by syntax highlighting
+  autocmd FileType go set foldmethod=syntax
+  
+  " By default set fold level start 1 just to be awere such functionallity
+  " and employ it in daily work
+  autocmd FileType go set foldlevelstart=1
+  " :autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
+  
+  " Display a small column to visually indicate folds
+  autocmd FileType go set foldcolumn=2
+" }}}
+augroup END
+
+" Automatically reformat code
+" TODO: move to ftplugin
+" TODO: on error changes will be lost:
+" should it call a function instead?
+augroup filetype_go_fmt
+	autocmd!
+
+	" = is mapped to gofmt
+	autocmd BufWritePre,BufRead *.go :normal gg=G
+
+	" restore pointer position, gofmt moves pointer to beginning of the buffer
+	autocmd BufWritePre,BufRead *.go ''
+augroup END
+" }}}
+
+"###########################################################################
+
+" Abbreviations ---------------------- {{{
+iabbrev @@ hi@deividaspetraitis.lt
+iabbrev ccopy Copyright 2013 Deividas Petraitis, all rights reserved.
+iabbrev ssig -- <cr>Deividas Petraitis<cr>hi@deividaspetraitis.lt
+" }}}
