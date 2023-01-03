@@ -70,20 +70,15 @@ Plugin 'vimwiki/vimwiki'
 " Fugitive is the premier Vim plugin for Git
 Plugin 'tpope/vim-fugitive'
 
+" Pomodoro plugin
+Plugin 'tricktux/pomodoro.vim'
+
+" Commenting plugin
+Plugin 'tpope/vim-commentary'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-" }}}
-
-" Plugin(s) settings  ---------------------- {{{
-source $DOTDIR/.vim/plugins/papercolor.vim
-source $DOTDIR/.vim/plugins/committia.vim
-source $DOTDIR/.vim/plugins/ultisnips.vim
-source $DOTDIR/.vim/plugins/vimhardtime.vim
-source $DOTDIR/.vim/plugins/vimwiki.vim
-source $DOTDIR/.vim/plugins/tmux.vim
-source $DOTDIR/.vim/plugins/fzf.vim
-source $DOTDIR/.vim/plugins/ycm.vim
 " }}}
 
 "###########################################################################
@@ -227,6 +222,21 @@ set ttimeoutlen=1
 
 set cpo-=<
 
+" Plugin(s) settings  ---------------------- {{{
+" This section is intentionally moved after initial settings defined above 
+" because some of the plugins might alter those.
+source $DOTDIR/.vim/plugins/papercolor.vim
+source $DOTDIR/.vim/plugins/committia.vim
+source $DOTDIR/.vim/plugins/ultisnips.vim
+source $DOTDIR/.vim/plugins/vimhardtime.vim
+source $DOTDIR/.vim/plugins/vimwiki.vim
+source $DOTDIR/.vim/plugins/tmux.vim
+source $DOTDIR/.vim/plugins/fzf.vim
+source $DOTDIR/.vim/plugins/ycm.vim
+source $DOTDIR/.vim/plugins/pomodoro.vim
+" }}}
+
+
 "###########################################################################
 " Mappings
 "###########################################################################
@@ -362,24 +372,21 @@ augroup END
 " }}}
 
 " TODO: make should run in backgroud?
-function! Lint()
+function! GolangCiLint()
 	let &makeprg=golangci-lint
     let &l:errformat="%f:%l:%c:\ %m,%f:%l:%c\ %#%m"
-	make | copen
+	make lint | copen
 endfunction
 
 " Learning vim hard way
-echo ">^.^<"
 nnoremap <leader>jr :set makeprg=golangci-lint <CR> :set errformat='' <CR>:make \| redraw! <CR> :copen<CR>
 
 " Go file type settings ---------------------- {{{
 augroup filetype_go
   autocmd!
-  " Commenting
-  " TODO: visual, multiple lines
-  " TODO: running second time should remove comment
-  autocmd FileType go nnoremap <buffer> <localleader>c I//<esc>
-  
+  " Calling GoFmt will have such side effects such as a) loosing opened folds and b) screwing jump list
+  autocmd FileType go nnoremap <buffer> <localleader>f :silent! GoFmt <cr> " GoFmt is a plugin function
+
   " Syntax folding ---------------------- {{{
   " Folds are defined by syntax highlighting
   autocmd FileType go set foldmethod=syntax
@@ -394,21 +401,6 @@ augroup filetype_go
 " }}}
 augroup END
 
-" Automatically reformat code
-" TODO: move to ftplugin
-" TODO: on error changes will be lost:
-" should it call a function instead?
-augroup filetype_go_fmt
-	autocmd!
-
-	" = is mapped to gofmt
-	autocmd BufWritePre,BufRead *.go :normal gg=G
-
-	" restore pointer position, gofmt moves pointer to beginning of the buffer
-	autocmd BufWritePre,BufRead *.go ''
-augroup END
-" }}}
-
 "###########################################################################
 
 " Abbreviations ---------------------- {{{
@@ -416,3 +408,68 @@ iabbrev @@ hi@deividaspetraitis.lt
 iabbrev ccopy Copyright 2013 Deividas Petraitis, all rights reserved.
 iabbrev ssig -- <cr>Deividas Petraitis<cr>hi@deividaspetraitis.lt
 " }}}
+
+function Meow()
+  echom "Meow!"
+endfunction
+
+function GetMeow()
+  return "Meow!"
+endfunction
+
+function DisplayName(name)
+  echom "Hello! My name is:"
+  echom a:name
+endfunction
+
+function UnscopedDisplayName(name)
+  echom "Hello! My name is:"
+  echom name
+endfunction
+
+function Varg(...)
+  echom a:0
+  echom a:1
+  echom a:2
+  echo a:000
+endfunction
+
+function Varg2(foo, ...)
+  echom a:foo
+  echo a:0
+  echo a:1
+  echo a:000
+endfunction
+
+function Assign(foo)
+  let a:foo = "Nope"
+  echo a:foo
+endfunction
+
+function AssignGood(foo)
+  let foo_tmp = a:foo
+  let foo_tmp = "Yep"
+  echom foo_tmp
+endfunction
+
+function Varg3(first, second = "default", ...)
+  echom a:first
+  echom a:second
+endfunction
+
+" comment
+function Comment(char)
+  :execute "normal! ^\<s-v>I" . a:char
+endfunction
+
+function Uncomment(char)
+  ":s "/" . a:char . "//"
+  " /^\="// 
+  " ^\s\="
+  " ^\s\{0,}"
+  " ^\s*"
+  echom "uncomment"
+"  :execute "su" . "/^\s*" . a:char . "//"
+"  :execute "su" . "/^\s*\/\//"
+  execute "%s/" . a:char . "/" . "" . "/"
+endfunction
