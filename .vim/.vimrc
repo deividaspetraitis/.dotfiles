@@ -249,10 +249,6 @@ inoremap <C-U> <C-G>u<C-U>
 " NERDTree plugin specific commands
 " Toggle ON/OFF tree F6
 nmap <F6> :NERDTreeToggle<CR>
-" Show your next matched string at the center of the screen when you press n 
-" or N, so it is easier to identify your location in the file
-nnoremap n nzz 
-nnoremap N Nzz
 
 " Navigation between splits  ---------------------- {{{
 nnoremap <C-J> <C-W><C-J>

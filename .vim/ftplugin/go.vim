@@ -8,12 +8,6 @@ setlocal spell
 " Filter 
 setlocal equalprg=gofmt
 
-" Set go fmt
-" augroup gofmt
-"   autocmd!
-"   autocmd BufWritePre *.go :GoFmt
-" augroup END 
-
 " Move around functions
 " See: https://github.com/vim/vim/blob/master/runtime/ftplugin/vim.vim
 nnoremap <silent><buffer> [[ m':call search('^\s*\(fu\%[nction]\\|def\)\>', "bW")<CR>
