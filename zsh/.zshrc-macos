@@ -1,7 +1,7 @@
 # Brew bins
 export PATH="/opt/homebrew/bin:${PATH}"
 
-# brew executable
+# Brew executable
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # For commits signing otherwise will lead to:
@@ -22,5 +22,6 @@ if [[ -z "$TMUX" ]] && [[ -z "$SKIP_TMUX" ]]; then
 	tmux attach || tmux new-session
 fi
 
-alias vim="/opt/homebrew/opt/vim/bin/vim"
+# Keep system wide and override with installed via homebrew
+alias vim=`brew --prefix`/bin/vim
 alias ctags=`brew --prefix`/bin/ctags
