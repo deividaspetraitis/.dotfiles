@@ -207,7 +207,7 @@ focus < f: yabai -m window --toggle zoom-fullscreen ; skhd --key "escape"
 focus < b : yabai -m window $(yabai -m query --windows | jq -c '.[] | select(.title|test("qutebrowser$")) .id') --focus ; skhd --key "escape"
 focus < t : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( .app == "Terminal" ) .id') --focus ; skhd --key "escape"
 focus < m : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( .app == "Mail" ) .id') --focus ; skhd --key "escape"
-focus < c : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( (.app == "Microsoft Teams" ) and .level == 0 ) .id') --focus ; skhd --key "escape"
+focus < c : yabai -m window $(yabai -m query --windows | jq -c '.[] | select( (.app == "Slack" ) and .level == 0 ) .id') --focus ; skhd --key "escape"
 
 # register mode "launcher"
 # -------------
