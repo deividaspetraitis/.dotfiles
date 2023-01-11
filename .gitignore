@@ -2,7 +2,7 @@
 # You can check current value of it by running:
 # git config --get core.excludesfile
 
-# Vim temporary files
+# Vim backup, undo files
 *~
 
 # Vim swap files
