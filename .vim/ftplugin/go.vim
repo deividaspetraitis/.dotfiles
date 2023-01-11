@@ -7,6 +7,10 @@ setlocal spell
 
 " Filter 
 setlocal equalprg=gofmt
+setlocal tags+=~/.vim/tags/go
+
+" TODO: mapping?
+" go list -f '{{.Dir}}' -deps ./... | xargs -I{} ctags --append=yes -R "{}"
 
 " Move around functions
 " See: https://github.com/vim/vim/blob/master/runtime/ftplugin/vim.vim
@@ -17,10 +21,10 @@ vnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*\(fu\
 
 " YCM mappings, we want to make it to work close as possible to the defaults
 
-nnoremap <silent><buffer> gD :YcmCompleter GoToDeclaration <CR>
-nnoremap <silent><buffer> g] :YcmCompleter GoToReferences <CR>
-nnoremap <silent><buffer> <leader>gi :YcmCompleter GoToImplementation <CR>
-nnoremap <silent><buffer> <C-]> :YcmCompleter GoToDefinition <CR>
+nnoremap <silent><buffer> <localleader>gD :YcmCompleter GoToDeclaration <CR>
+nnoremap <silent><buffer> <localleader>g] :YcmCompleter GoToReferences <CR>
+nnoremap <silent><buffer> <localleader>gi :YcmCompleter GoToImplementation <CR>
+nnoremap <silent><buffer> <localleader>] :YcmCompleter GoToDefinition <CR>
 nnoremap <silent><buffer> <C-w>} :YcmCompleter GetDoc <CR>
 
 
