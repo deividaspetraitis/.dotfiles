@@ -180,19 +180,23 @@ set path+=$PWD/**
 " While typing a search command, show where the pattern, as it was typed so far, matches.
 set incsearch
 
-" use 256 colors in terminal
+" Use 256 colors in terminal.
 if !has("gui_running")
     set t_Co=256
     set term=screen-256color
 endif
 
-" cursor shape based on mode
-let &t_SI="\033[6 q" " start insert mode, blinking underline cursor
-let &t_EI="\033[2 q" " end insert mode, blinking block
+" Set cursor shapes based on the mode
+if &term == 'xterm-256color' || &term == 'screen-256color'
+    let &t_SI = "\<Esc>[6 q"  " start insert mode, bar
+    let &t_EI = "\<Esc>[2 q"  " end insert mode, block
 
-" TODO: does not work
+	" Restore cursor shape resuming back to Vim
+	let &t_TI .= "\e[2 q"	  " controls what happens when you exit
+	let &t_TE .= "\e[4 q"	  " controls what happens when you start
+endif
 
-" yank to system clipboard 
+" Yank to system clipboard
 if system('uname -s') == "Darwin\n"
   "OSX
   set clipboard=unnamed 
@@ -221,6 +225,10 @@ set ttimeout
 set ttimeoutlen=1
 
 set cpo-=<
+
+" Look for a tags file in the directory of the current file, then upward until
+" / and in the working directory, then upward until $HOME.
+set tags=./tags;,tags;
 
 " Plugin(s) settings  ---------------------- {{{
 " This section is intentionally moved after initial settings defined above 
@@ -333,8 +341,12 @@ augroup vimHints
 augroup END
 
 " TODO:
+
 " Auto generate tags file on file write of *.c and *.h files
-" autocmd BufWritePost *.c,*.h,*.go silent! !ctags . &
+augroup tags_generate
+	autocmd!
+	autocmd BufWritePost *.go silent! !ctags --append=yes . &
+augroup END
 
 " Operator-pending mappings ---------------------- {{{
 onoremap in( :<c-u>normal! f(vi(<cr>
