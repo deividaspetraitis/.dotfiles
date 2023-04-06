@@ -5,12 +5,28 @@ setlocal spelllang=en_us
 setlocal spellfile=~/.vim/spell/en_us.utf-8.add
 setlocal spell
 
+" Syntax folding ---------------------- {{{
+" Folds are defined by syntax highlighting
+setlocal foldmethod=syntax
+
+" By default set fold level start 1 just to be aware such functionality and employ it in daily work
+setlocal foldlevelstart=1
+
+" Display a small column to visually indicate folds
+setlocal foldcolumn=2
+" }}}
+
+" Format
+setlocal formatexpr=go#fmt#Format(-1)
+
 " Filter 
 setlocal equalprg=gofmt
+
 setlocal tags+=~/.vim/tags/go
 
 " TODO: mapping?
 " go list -f '{{.Dir}}' -deps ./... | xargs -I{} ctags --append=yes -R "{}"
+" go list <concretefile> -f '{{.Dir}}'
 
 " Move around functions
 " See: https://github.com/vim/vim/blob/master/runtime/ftplugin/vim.vim
@@ -25,7 +41,33 @@ nnoremap <silent><buffer> <localleader>gD :YcmCompleter GoToDeclaration <CR>
 nnoremap <silent><buffer> <localleader>g] :YcmCompleter GoToReferences <CR>
 nnoremap <silent><buffer> <localleader>gi :YcmCompleter GoToImplementation <CR>
 nnoremap <silent><buffer> <localleader>] :YcmCompleter GoToDefinition <CR>
+nnoremap <silent><buffer> <localleader>l :GolangCiLint()[ <CR>
 nnoremap <silent><buffer> <C-w>} :YcmCompleter GetDoc <CR>
 
+" TODO: make should run in backgroud?
+function! GolangCiLint()
+	let &makeprg=golangci-lint
+    let &l:errformat="%f:%l:%c:\ %m,%f:%l:%c\ %#%m"
+	make lint | copen
+endfunction
 
-nnoremap <silent><buffer> <leader>l :Lint() <CR>
+" Learning vim hard way
+" nnoremap <leader>jr :set makeprg=golangci-lint <CR> :set errformat='' <CR>:make \| redraw! <CR> :copen<CR>
+
+" Auto generate tags file on file write of *.go
+augroup tags_generate
+	autocmd!
+	" Go list will list full path to packages of current file, -e flag instructs to ignore encountered errors.
+	" Generated list is passed to ctags utility to generate tags for given packages, append flag instructs to append instead of full-rewrite of tags file.
+	" Because command might take some time to finish it it executed in background to avoid blocking.
+	" TODO: if one process is already in progress we should not to run another one, otherwise both processes ends up writing to the same file and corrupting it?
+	" autocmd BufWritePost *.go silent! execute "!go list -e -f '{{.Dir}}' -deps " .. shellescape(expand('%:p')) .. " | xargs -I{} ctags --append=yes -R '{}' &"
+	autocmd BufWritePost *.go silent! :call GoCtags(expand('%:p'))
+augroup END
+
+function! GoCtags(file)
+  " execute "!go list -e -f '{{.Dir}}' -deps " .. shellescape(a:file) .. " | xargs -I{} ctags --quiet=yes --append=yes -R '{}' &"
+  execute "!ctags -R . &"
+endfunction
+
+

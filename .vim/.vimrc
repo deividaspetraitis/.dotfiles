@@ -64,9 +64,6 @@ Plugin 'junegunn/limelight.vim' " dim all lines except the current line when tur
 " More Pleasant Editing on Commit Message
 Plugin 'rhysd/committia.vim'
 
-" VimWiki is a personal wiki for Vim
-Plugin 'vimwiki/vimwiki'
-
 " Fugitive is the premier Vim plugin for Git
 Plugin 'tpope/vim-fugitive'
 
@@ -91,8 +88,10 @@ filetype plugin indent on    " required
 " Remove ALL autocommands for the current group.
 autocmd!
 
-" Enable syntax highlighting
-syntax on
+" Enable syntax highlighting when terminal supports colors
+if &t_Co > 1
+   syntax enable
+endif
 
 " Flash screen instead of beep sound
 set visualbell
@@ -185,6 +184,10 @@ if !has("gui_running")
     set t_Co=256
     set term=screen-256color
 endif
+
+" Enable invisible chars.
+set list
+set listchars=tab:▸\ ,eol:¬
 
 " Set cursor shapes based on the mode
 if &term == 'xterm-256color' || &term == 'screen-256color'
@@ -280,7 +283,10 @@ vnoremap K :m '<-2<CR>gv=gv
 nnoremap <Leader>w :w<CR>
 
 " Same as fg but allows to open and edit non-existing file
-noremap <leader>gf :e <cfile><cr>
+" If starts with dot?
+noremap <leader>gf :execute "e " .. expand('%:p:h') .. "/" .. expand('<cfile>')<cr>
+
+noremap <leader>vw :e ~/vimwiki/index.md<cr>
 
 " Tab for [t]abs
 " It is is not possible to remap <TAB> without effecting <C-]>
@@ -291,7 +297,7 @@ nnoremap <silent> <S-t> :tabnew<CR>
 
 " Vimrc related mappings  ---------------------- {{{
 nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
-nnoremap <Leader>sv :source ~/.vimrc <CR>
+nnoremap <Leader>sv :source $MYVIMRC <CR>
 " }}}
 
 " Surround text object with X mappings  ---------------------- {{{
@@ -314,6 +320,7 @@ exec 'nnoremap <Leader>ss :mks! ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
 exec 'nnoremap <Leader>sr :so ~/.vim/sessions/*.vim<C-D><BS><BS><BS><BS><BS>'
 " }}}
 
+" Cursor line settings  ---------------------- {{{
 " Display cursor line only in a active window.
 " https://codeyarns.com/tech/2013-02-07-how-to-show-cursorline-only-in-active-window-of-vim.html#gsc.tab=0
 augroup CursorLineOnlyInActiveWindow 
@@ -321,6 +328,7 @@ augroup CursorLineOnlyInActiveWindow
 	autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
 	autocmd WinLeave * setlocal nocursorline
 augroup end
+" }}}
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
@@ -338,14 +346,6 @@ augroup vimHints
     \ echohl Todo | 
     \ echo 'You discovered the command-line window! You can close it with ":q".' |
     \ echohl None
-augroup END
-
-" TODO:
-
-" Auto generate tags file on file write of *.c and *.h files
-augroup tags_generate
-	autocmd!
-	autocmd BufWritePost *.go silent! !ctags --append=yes . &
 augroup END
 
 " Operator-pending mappings ---------------------- {{{
@@ -366,49 +366,6 @@ augroup END
 "
 " NOTE: File specific cmd's goes into: ~/.vim/ftplugin/{filetype}_whatever.vim
 "###########################################################################
-
-" Vimscript file settings ---------------------- {{{
-augroup filetype_vim
-  autocmd!
-
-  " Folding ---------------------- {{{
-  autocmd FileType vim setlocal foldmethod=marker
-  autocmd FileType vim setlocal foldlevelstart=2
-  autocmd FileType vim set foldcolumn=2
-  " }}}
-augroup END
-" }}}
-
-" TODO: make should run in backgroud?
-function! GolangCiLint()
-	let &makeprg=golangci-lint
-    let &l:errformat="%f:%l:%c:\ %m,%f:%l:%c\ %#%m"
-	make lint | copen
-endfunction
-
-" Learning vim hard way
-nnoremap <leader>jr :set makeprg=golangci-lint <CR> :set errformat='' <CR>:make \| redraw! <CR> :copen<CR>
-
-" Go file type settings ---------------------- {{{
-augroup filetype_go
-  autocmd!
-  " Calling GoFmt will have such side effects such as a) loosing opened folds and b) screwing jump list
-  autocmd FileType go nnoremap <buffer> <localleader>f :silent! GoFmt <cr> " GoFmt is a plugin function
-
-  " Syntax folding ---------------------- {{{
-  " Folds are defined by syntax highlighting
-  autocmd FileType go set foldmethod=syntax
-  
-  " By default set fold level start 1 just to be awere such functionallity
-  " and employ it in daily work
-  autocmd FileType go set foldlevelstart=1
-  " :autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
-  
-  " Display a small column to visually indicate folds
-  autocmd FileType go set foldcolumn=2
-" }}}
-augroup END
-
 "###########################################################################
 
 " Abbreviations ---------------------- {{{
@@ -481,3 +438,17 @@ function Uncomment(char)
 "  :execute "su" . "/^\s*\/\//"
   execute "%s/" . a:char . "/" . "" . "/"
 endfunction
+
+" set signcolumn=no
+"highlight YcmWarningLine ctermfg=white
+"highlight YcmWarningSign ctermfg=white
+"highlight YcmWarningSection ctermfg=white 
+"highlight YcmErrorText ctermfg=white
+"highlight YcmErrorSign ctermfg=white
+"highlight SyntasticError ctermfg=white
+"highlight YcmWarningSection ctermfg=white
+"highlight SyntasticWarning ctermfg=white
+"highlight SpellBad term=reverse ctermfg=124 ctermbg=225 guifg=White guibg=Red
+" highlight SpellBad ctermfg=green guifg=#80a0ff gui=bold
+"highlight YcmErrorLine guibg=#3f0000
+" highlight Comment ctermfg=blue
