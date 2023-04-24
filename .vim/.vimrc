@@ -82,10 +82,11 @@ filetype plugin indent on    " required
 " Vim system settings
 " PLUGINS SETTINGS HAS DEDICATED SECTION BELOW, DO NOT MIX
 
+" Enable matchit plugin
+packadd! matchit
+
 " When your .vimrc file is sourced twice, the autocommands will appear twice.
-" To avoid this, put this command in your .vimrc file, before defining
-" autocommands:
-" Remove ALL autocommands for the current group.
+" To avoid this, put this command in your .vimrc file, before defining autocommands
 autocmd!
 
 " Enable syntax highlighting when terminal supports colors

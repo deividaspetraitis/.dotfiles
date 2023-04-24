@@ -22,7 +22,16 @@ setlocal formatexpr=go#fmt#Format(-1)
 " Filter 
 setlocal equalprg=gofmt
 
+" Tags
 setlocal tags+=~/.vim/tags/go
+
+" Match world for matchit plugin
+if exists("loaded_matchit")
+  let b:match_words =
+	  \ '^\<func\>:\<return\>:^},' .
+	  \ '\<for\>:\<range\>:\<}\>,' .
+	  \ '\(^\s*\)\@<=\<if\>:\<else\ if\|else\>:^}'
+endif
 
 " TODO: mapping?
 " go list -f '{{.Dir}}' -deps ./... | xargs -I{} ctags --append=yes -R "{}"
@@ -41,18 +50,7 @@ nnoremap <silent><buffer> <localleader>gD :YcmCompleter GoToDeclaration <CR>
 nnoremap <silent><buffer> <localleader>g] :YcmCompleter GoToReferences <CR>
 nnoremap <silent><buffer> <localleader>gi :YcmCompleter GoToImplementation <CR>
 nnoremap <silent><buffer> <localleader>] :YcmCompleter GoToDefinition <CR>
-nnoremap <silent><buffer> <localleader>l :GolangCiLint()[ <CR>
 nnoremap <silent><buffer> <C-w>} :YcmCompleter GetDoc <CR>
-
-" TODO: make should run in backgroud?
-function! GolangCiLint()
-	let &makeprg=golangci-lint
-    let &l:errformat="%f:%l:%c:\ %m,%f:%l:%c\ %#%m"
-	make lint | copen
-endfunction
-
-" Learning vim hard way
-" nnoremap <leader>jr :set makeprg=golangci-lint <CR> :set errformat='' <CR>:make \| redraw! <CR> :copen<CR>
 
 " Auto generate tags file on file write of *.go
 augroup tags_generate
@@ -69,5 +67,3 @@ function! GoCtags(file)
   " execute "!go list -e -f '{{.Dir}}' -deps " .. shellescape(a:file) .. " | xargs -I{} ctags --quiet=yes --append=yes -R '{}' &"
   execute "!ctags -R . &"
 endfunction
-
-
