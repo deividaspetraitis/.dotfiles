@@ -56,6 +56,7 @@ yabai -m rule --add app="^OpenVPN Connect$" manage=off
 yabai -m rule --add app="^Activity Monitor$" manage=off
 yabai -m rule --add app="^Installer$" manage=off
 yabai -m rule --add app="^choose$" manage=off
+yabai -m rule --add app="^licecap$" manage=off
 
 yabai -m rule --add app="^Mail$" title="^New Message*" manage=off
 yabai -m rule --add app="^Mail$" title="^New Message*" sticky=on
@@ -65,5 +66,6 @@ yabai -m rule --add app="^Mail$" title="^Fwd:*" manage=off
 yabai -m rule --add app="^Mail$" title="^Fwd:*" sticky=on
 yabai -m rule --add app="^Mail$" space=2
 yabai -m rule --add app="^Mail$" title="^General$" manage=off
+
 
 echo "yabai configuration loaded.."
