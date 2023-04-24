@@ -1,6 +1,9 @@
 # Brew bins
 export PATH="/opt/homebrew/bin:${PATH}"
 
+# Mac ports
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
 # Brew executable
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
