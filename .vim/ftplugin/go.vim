@@ -44,6 +44,10 @@ vnoremap <silent><buffer> [[ m':<C-U>exe "normal! gv"<Bar>call search('^\s*\(fu\
 nnoremap <silent><buffer> ]] m':call search('^\s*\(fu\%[nction]\\|def\)\>', "W")<CR>
 vnoremap <silent><buffer> ]] m':<C-U>exe "normal! gv"<Bar>call search('^\s*\(fu\%[nction]\\|def\)\>', "W")<CR>
 
+" Move around previous/next unmatched "if".
+" noremap <silent><buffer> [# :call search('^\s*\<if\>\|\<else if\>|\<else\>', "bW")<CR>
+" noremap <silent><buffer> ]# :call search('^\s*\<else\>\|<else if\>', "W")<CR>
+
 " YCM mappings, we want to make it to work close as possible to the defaults
 
 nnoremap <silent><buffer> <localleader>gD :YcmCompleter GoToDeclaration <CR>
@@ -65,5 +69,5 @@ augroup END
 
 function! GoCtags(file)
   " execute "!go list -e -f '{{.Dir}}' -deps " .. shellescape(a:file) .. " | xargs -I{} ctags --quiet=yes --append=yes -R '{}' &"
-  execute "!ctags -R . &"
+  execute "!ctags -R . 2>/dev/null &"
 endfunction

@@ -20,6 +20,13 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# OS specific settings
+case "$OSTYPE" in
+  darwin*)  source ~/.config/zsh/.zshrc-macos ;; 
+  linux*)   source ~/.config/zsh/.zshrc-linux ;;
+  *)        echo ".zshrc unknown OS: $OSTYPE" ;;
+esac
+
 # Options
 # More options: https://zsh.sourceforge.io/Doc/Release/Options.html
 setopt AUTO_PARAM_SLASH
@@ -42,6 +49,10 @@ export KEYTIMEOUT=1 # timeout for switching between INSERT/NORMAL modes
 bindkey "^P" up-line-or-search
 bindkey "^N" down-line-or-search
 
+# vi-yank-clip is OS specific
+zle -N vi-yank-clip
+bindkey -M vicmd 'y' vi-yank-clip
+
 # Vi cursor for insert/visual modes
 autoload -Uz cursor_mode && cursor_mode
 
@@ -55,10 +66,3 @@ setopt noautomenu
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-
-# OS specific settings
-case "$OSTYPE" in
-  darwin*)  source ~/.config/zsh/.zshrc-macos ;; 
-  linux*)   source ~/.config/zsh/.zshrc-linux ;;
-  *)        echo ".zshrc unknown OS: $OSTYPE" ;;
-esac

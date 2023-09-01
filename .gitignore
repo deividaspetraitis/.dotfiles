@@ -3,6 +3,7 @@
 # git config --get core.excludesfile
 
 # Vim backup, undo files
+*.orig
 *~
 
 # Vim swap files

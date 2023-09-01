@@ -53,3 +53,6 @@ autoload -U compinit; compinit -d "$XDG_CACH_HOME/zsh/.zcompdump";
 
 # Autocomplete hidden files
 _comp_options+=(globdots)
+
+# Share the shell history between sessions
+setopt INC_APPEND_HISTORY

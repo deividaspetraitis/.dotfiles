@@ -28,3 +28,9 @@ fi
 # Keep system wide and override with installed via homebrew
 alias vim=`brew --prefix`/bin/vim
 alias ctags=`brew --prefix`/bin/ctags
+
+# vi mode copy widget
+function vi-yank-clip {
+	zle vi-yank
+	echo "$CUTBUFFER" | ghead -c -1 | pbcopy
+}

@@ -73,6 +73,86 @@ Plugin 'tricktux/pomodoro.vim'
 " Commenting plugin
 Plugin 'tpope/vim-commentary'
 
+" The undo history visualizer
+Plugin 'mbbill/undotree'
+
+" Adds Artificial Intelligence (AI) capabilities 
+" Plugin 'madox2/vim-ai'
+let g:vim_ai_complete = {
+\  "engine": "complete",
+\  "http": {
+\    "headers": {
+\      "Content-Type": "application/json",
+\    },
+\    "request_timeout": 20,
+\    "chat": {
+\      "URI": ""
+\    }
+\  },
+\  "options": {
+\    "request_timeout": 20,
+\    "model": "gpt-3.5-turbo",
+\    "max_tokens": 1000,
+\    "temperature": 0.1,
+\    "frequency_penalty": 0,
+\    "presence_penalty": 0,
+\    "top_p": 0.95,
+\    "stop": "null"
+\  },
+\  "ui": {
+\    "paste_mode": 1
+\  }
+\}
+
+
+let g:vim_ai_chat = {
+\  "options": {
+\    "model": "gpt-3.5-turbo",
+\    "max_tokens": 1000,
+\    "temperature": 1,
+\    "request_timeout": 20,
+\  },
+\  "ui": {
+\    "code_syntax_enabled": 1,
+\    "populate_options": 0,
+\    "open_chat_command": "preset_below",
+\    "scratch_buffer_keep_open": 0,
+\    "paste_mode": 1,
+\  },
+\}
+
+let initial_prompt =<< trim END
+>>> system
+
+You are going to play a role of a completion engine with following parameters:
+Task: Provide compact code/text completion, generation, transformation or explanation
+Topic: general programming and text editing
+Style: Plain result without any commentary, unless commentary is necessary
+Audience: Users of text editor and programmers that need to transform/generate text
+END
+
+let chat_engine_config = {
+\  "engine": "chat",
+\  "options": {
+\    "model": "gpt-3.5-turbo",
+\    "max_tokens": 1000,
+\    "temperature": 0.1,
+\    "request_timeout": 20,
+\    "selection_boundary": "",
+\    "initial_prompt": initial_prompt,
+\  },
+\  "ui": {
+\    "code_syntax_enabled": 1,
+\    "populate_options": 0,
+\    "open_chat_command": "preset_below",
+\    "scratch_buffer_keep_open": 0,
+\    "paste_mode": 1,
+\  },
+\}
+
+let g:vim_ai_complete = chat_engine_config
+let g:vim_ai_edit = chat_engine_config
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -82,12 +162,12 @@ filetype plugin indent on    " required
 " Vim system settings
 " PLUGINS SETTINGS HAS DEDICATED SECTION BELOW, DO NOT MIX
 
-" Enable matchit plugin
-packadd! matchit
-
 " When your .vimrc file is sourced twice, the autocommands will appear twice.
 " To avoid this, put this command in your .vimrc file, before defining autocommands
 autocmd!
+
+" Make sure you put this _before_ the ":syntax enable" command, otherwise the colors will already have been set
+source $DOTDIR/.vim/plugins/papercolor.vim
 
 " Enable syntax highlighting when terminal supports colors
 if &t_Co > 1
@@ -117,6 +197,9 @@ set completeopt+=popup
 
 " Enable spell checking
 set spell
+
+" Show @@@ in the last line if it is truncated.
+set display=truncate
 
 set tabpagemax=100
 
@@ -164,6 +247,7 @@ if has("vms")
   set nobackup
 else
   set backup
+  set patchmode=.orig
   if has('persistent_undo')
     " Maintain undo history between sessions
 	set undofile
@@ -228,6 +312,12 @@ let g:C_Ctrl_k   = 'off'
 set ttimeout
 set ttimeoutlen=1
 
+" Briefly move cursor to the matching pair.
+set showmatch
+
+" Do not start search from the beginning.
+set nowrapscan
+
 set cpo-=<
 
 " Look for a tags file in the directory of the current file, then upward until
@@ -237,26 +327,59 @@ set tags=./tags;,tags;
 " Plugin(s) settings  ---------------------- {{{
 " This section is intentionally moved after initial settings defined above 
 " because some of the plugins might alter those.
-source $DOTDIR/.vim/plugins/papercolor.vim
 source $DOTDIR/.vim/plugins/committia.vim
 source $DOTDIR/.vim/plugins/ultisnips.vim
 source $DOTDIR/.vim/plugins/vimhardtime.vim
-source $DOTDIR/.vim/plugins/vimwiki.vim
 source $DOTDIR/.vim/plugins/tmux.vim
 source $DOTDIR/.vim/plugins/fzf.vim
 source $DOTDIR/.vim/plugins/ycm.vim
 source $DOTDIR/.vim/plugins/pomodoro.vim
 " }}}
 
+" Add optional packages. ------------------{{{
+
+" This plugin displays a manual page in a nice way.  
+" See |find-manpage|.
+runtime ftplugin/man.vim
+
+" The matchit plugin makes the % command work better, but it is not backwards
+" compatible.
+" The ! means the package won't be loaded right away but when plugins are
+" loaded during initialization.
+if has('syntax') && has('eval')
+  packadd! matchit
+endif
+
+" NETRW setup
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " hide dot files on load
+let g:netrw_keepdir = 0 " Keep the current directory and the browsing
+						" directory synced
+" }}}
 
 "###########################################################################
 " Mappings
 "###########################################################################
 
+" operator pending mappings
+" TODO: move to go
+omap ic :<C-U>normal! T}vt{<CR>
+omap af :<C-U>normal! [V]mz[/func<CR>N[%]`z<CR>
+
+
 "This is how it worked before Vim 5.0. 
 " Otherwise the "Q" command starts Ex mode, but you will not need it.
 map Q gq
 inoremap <C-U> <C-G>u<C-U>
+
+" My keyboard does not have <Home>, <End>
+" TODO:
+inoremap <S-^> <Home>
+inoremap <S-$> <End>
 
 " NERDTree plugin specific commands
 " Toggle ON/OFF tree F6
@@ -288,12 +411,6 @@ nnoremap <Leader>w :w<CR>
 noremap <leader>gf :execute "e " .. expand('%:p:h') .. "/" .. expand('<cfile>')<cr>
 
 noremap <leader>vw :e ~/vimwiki/index.md<cr>
-
-" Tab for [t]abs
-" It is is not possible to remap <TAB> without effecting <C-]>
-nnoremap <Leader> <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
 " }}}
 
 " Vimrc related mappings  ---------------------- {{{
@@ -375,81 +492,11 @@ iabbrev ccopy Copyright 2013 Deividas Petraitis, all rights reserved.
 iabbrev ssig -- <cr>Deividas Petraitis<cr>hi@deividaspetraitis.lt
 " }}}
 
-function Meow()
-  echom "Meow!"
-endfunction
-
-function GetMeow()
-  return "Meow!"
-endfunction
-
-function DisplayName(name)
-  echom "Hello! My name is:"
-  echom a:name
-endfunction
-
-function UnscopedDisplayName(name)
-  echom "Hello! My name is:"
-  echom name
-endfunction
-
-function Varg(...)
-  echom a:0
-  echom a:1
-  echom a:2
-  echo a:000
-endfunction
-
-function Varg2(foo, ...)
-  echom a:foo
-  echo a:0
-  echo a:1
-  echo a:000
-endfunction
-
-function Assign(foo)
-  let a:foo = "Nope"
-  echo a:foo
-endfunction
-
-function AssignGood(foo)
-  let foo_tmp = a:foo
-  let foo_tmp = "Yep"
-  echom foo_tmp
-endfunction
-
-function Varg3(first, second = "default", ...)
-  echom a:first
-  echom a:second
-endfunction
-
-" comment
-function Comment(char)
-  :execute "normal! ^\<s-v>I" . a:char
-endfunction
-
-function Uncomment(char)
-  ":s "/" . a:char . "//"
-  " /^\="// 
-  " ^\s\="
-  " ^\s\{0,}"
-  " ^\s*"
-  echom "uncomment"
-"  :execute "su" . "/^\s*" . a:char . "//"
-"  :execute "su" . "/^\s*\/\//"
-  execute "%s/" . a:char . "/" . "" . "/"
-endfunction
-
-" set signcolumn=no
-"highlight YcmWarningLine ctermfg=white
-"highlight YcmWarningSign ctermfg=white
-"highlight YcmWarningSection ctermfg=white 
-"highlight YcmErrorText ctermfg=white
-"highlight YcmErrorSign ctermfg=white
-"highlight SyntasticError ctermfg=white
-"highlight YcmWarningSection ctermfg=white
-"highlight SyntasticWarning ctermfg=white
-"highlight SpellBad term=reverse ctermfg=124 ctermbg=225 guifg=White guibg=Red
-" highlight SpellBad ctermfg=green guifg=#80a0ff gui=bold
-"highlight YcmErrorLine guibg=#3f0000
-" highlight Comment ctermfg=blue
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+" Revert with: ":delcommand DiffOrig".
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
