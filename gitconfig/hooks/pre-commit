@@ -3,11 +3,12 @@
 # If any command fails, exit immediately with that command's exit status
 set -eo pipefail
 
+# TODO: re-enable
 # Import custom gpg cache function
-. "$HOME/.dotfiles/zsh/external/gpg_cache.zsh"
+# . "$HOME/.dotfiles/zsh/external/gpg_cache.zsh"
 
 # Cache commits GPG signing key
-gpg_cache 64yfdeckzy5yltmqtjesddktyq
+# gpg_cache 64yfdeckzy5yltmqtjesddktyq
 
 # Import git nocommit function
 . "$HOME/.dotfiles/gitconfig/hooks/scripts/nocommit.zsh"
