@@ -4,12 +4,12 @@
 set -eo pipefail
 
 # Import custom gpg cache function
-. "$ZDOTDIR/external/gpg_cache.zsh"
+. "$HOME/.dotfiles/zsh/external/gpg_cache.zsh"
 
 # Cache commits GPG signing key
 gpg_cache 64yfdeckzy5yltmqtjesddktyq
 
 # Import git nocommit function
-. "$DOTDIR/gitconfig/hooks/scripts/nocommit.zsh"
+. "$HOME/.dotfiles/gitconfig/hooks/scripts/nocommit.zsh"
 
 # nocommit
